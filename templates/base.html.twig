@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr" dir="ltr">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" href="{{ asset("assets/css/sb-admin-2.min.css") }}">
+        <link rel="stylesheet" href="{{ asset("assets/css/style.css") }}">
         <title>{% block title %}Welcome!{% endblock %}</title>
+        <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
+         {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
@@ -14,6 +19,126 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-    </body>
+        
+        <div class="sidebar hidden-print">
+        <div class="logo-details">
+            <i class="bx bxl-c-plus-plus"></i>
+            <span class="logo_name">SGA_CIB</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="" class="">
+                    <i class="bx bx-grid-alt "></i>
+                    <span class="links_name">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="" class="">
+                    <i class="bx bx-user"></i>
+                    <span class="links_name">Client</span>
+                </a>
+            </li>
+            <li>
+                <a href=""  class="active">
+                    <i class="bx bx-box"></i>
+                    <span class="links_name">Courrier</span>
+                </a>
+            </li>
+            <li>
+                <a href=""  class="">
+                    <i class="bx bx-list-ul"></i>
+                    <span class="links_name">Commandes</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bx bx-pie-chart-alt-2"></i>
+                    <span class="links_name">Analyses</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bx bx-coin-stack"></i>
+                    <span class="links_name">Stock</span>
+                </a>
+            </li>
+            <li class="">
+                <a href="#">
+                    <i class="bx bx-book-alt "></i>
+                    <span class="links_name">Tout les commmandes</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bx bx-user"></i>
+                    <span class="links_name">Utilisateur</span>
+                </a>
+            </li>
+            <li>
+            <a href="#">
+                <i class="bx bx-message" ></i>
+                <span class="links_name">Messages</span>
+            </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bx bx-cog"></i>
+                    <span class="links_name">Configuration</span>
+                </a>
+            </li>
+            <li class="log_out">
+                <a href="#">
+                    <i class="bx bx-log-out"></i>
+                    <span class="links_name">Déconnexion</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <section class="home-section">
+        <nav class="hidden-print">
+            <div class="sidebar-button">
+                <i class="bx bx-menu sidebarBtn"></i>
+                <span class="dashboard">
+                   
+                </span>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="Recherche..." />
+                <a href=""><i class="bx bx-search mt-2 "></i></a>
+            </div>
+            <div class="profile-details">
+                <img src="images/profile.jpg" alt="">
+                <span class="admin_name">Tayou</span>
+                <i class="bx bx-chevron-down"></i>
+            </div>
+        </nav>
+           {% for message in app.session.FlashBag.get('info') %}
+                <div class="alert alert-info">{{message}} </div>
+                {% endfor %}
+                {% for message in app.session.FlashBag.get('error') %}
+                <div class="alert alert-danger">{{message}} </div>
+                {% endfor %}
+                {% for message in app.session.FlashBag.get('success') %}
+                <div class="alert alert-success">{{message}}</div>
+                {% endfor %}
+    <br> <br> <br> <br> <br>
+    
+
+    {% block body %}      {% endblock %}
+    
+    </section>
+     
+<script>
+    let sidebar = document.querySelector(".sidebar");
+    let sidebarBtn = document.querySelector(".sidebarBtn");
+    sidebarBtn.onclick = function() {
+        sidebar.classList.toggle("active");
+        if (sidebar.classList.contains("active")) {
+            sidebarBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+        } else sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+    };
+</script>
+<script type="text/javascript" src="{{ asset("assets/js/sb-admin-2.min.js") }}" ></script> 
+
+</body>
 </html>
