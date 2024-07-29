@@ -31,8 +31,16 @@ class CourrierController extends AbstractController
             'controller_name' => 'CourrierController',
         ]);
     }
+    #[Route('/courrier/list', name: 'app_courrier.list')]
+    public function listCourrier(ManagerRegistry $doctrine): Response
+    {
+        $repository = $doctrine->getRepository(Courrier::class)->findAll();
+        return $this->render('courrier/list.html.twig', [
+            'courriers' => $repository,
+        ]);
+    }
     #[Route('/courrier/add', name: 'app_courrier.add')]
-    public function addCouu(ManagerRegistry $doctrine, Request $request): Response
+    public function addCourrier(ManagerRegistry $doctrine, Request $request): Response
     {
 
     
@@ -73,20 +81,16 @@ class CourrierController extends AbstractController
         // $manager->flush();
 
             $courrier=new Courrier();
-            $pieceJointe=new PieceJointe();
             $form = $this->createForm(CourrierType::class, $courrier);
-            $formP= $this->createForm(PieceJointeType::class, $pieceJointe);
              $form->handleRequest($request);
-             $formP->handleRequest($request);
             // Mon formulaire va aller traiter la requete 
 
-            if($form->isSubmitted() && $form->isValid() && $formP->isSubmitted() && $formP->isValid()){
+            if($form->isSubmitted() && $form->isValid() ){
                 // si mon formulaire est soumis, on ajoute ,
                 // redige vers les courrier, et messages success
                 
                 $entityManager=$doctrine->getManager(); 
                  $entityManager->persist($courrier);
-                 $entityManager->persist($pieceJointe);
               
                 
                 $entityManager->flush();
@@ -99,7 +103,6 @@ class CourrierController extends AbstractController
     }
     return $this->render('courrier/add.html.twig', [
         'form' => $form->createView(),
-        'formP' => $formP->createView(),
         
     ]);
 }}

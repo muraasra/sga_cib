@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: CourrierRepository::class)]
 class Courrier
@@ -17,37 +19,50 @@ class Courrier
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[NotBlank(message:"Veillez renseigner ce champ")]
+    #[Length(min:10,max:50, minMessage:"Veuiller entrer au moins 10 caractères ",maxMessage:"Trop de caractères")]
     private ?string $numero_odre = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[NotBlank(message:"Veillez renseigner la date de reception")]
     private ?\DateTimeInterface $date_reception = null;
 
     #[ORM\Column(length: 255)]
+    #[NotBlank(message:"Veillez renseigner le expediteur du courrier")]
     private ?string $expediteur = null;
 
     #[ORM\Column(length: 255)]
+    #[NotBlank(message:"Veillez renseigner le destinataire du courrier")]
     private ?string $destinataire = null;
 
     #[ORM\Column(length: 255)]
+    #[NotBlank(message:"Veillez entrer l'objet du courrier")]
     private ?string $objet = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    // #[NotBlank(message:"Veillez entrer une breve description sur le courrier recu")]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'courriers')]
+    #[Length(min:5, minMessage:"Veuiller selectioner un type ")]
+    # #[NotBlank(message:"Veillez renseigner le type de courrier recu")]
     private ?TypeCourrier $type_courrier = null;
 
     #[ORM\OneToMany(targetEntity: Historique::class, mappedBy: 'courrier_id')]
     private Collection $historiques;
 
-    #[ORM\OneToMany(targetEntity: PieceJointe::class, mappedBy: 'courrier', orphanRemoval: true)]
-    private Collection $piece_jointe;
+    ##[ORM\OneToMany(targetEntity: PieceJointe::class, mappedBy: 'courrier', orphanRemoval: true)]
+    #private Collection $piece_jointe;
 
-    public function __construct()
-    {
-        $this->historiques = new ArrayCollection();
-        $this->piece_jointe = new ArrayCollection();
-    }
+    #[ORM\Column(length: 255)]
+    #[NotBlank(message:"Veillez renseigner le type de courrier recu")]
+    private ?string $pieceJointe = null;
+
+    // public function __construct()
+    // {
+    //     $this->historiques = new ArrayCollection();
+    //     $this->piece_jointe = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -168,33 +183,45 @@ class Courrier
         return $this;
     }
 
-    /**
-     * @return Collection<int, PieceJointe>
-     */
-    public function getPieceJointe(): Collection
-    {
-        return $this->piece_jointe;
-    }
+    // /**
+    //  * @return Collection<int, PieceJointe>
+    //  */
+    // public function getPieceJointe(): Collection
+    // {
+    //     return $this->piece_jointe;
+    // }
 
-    public function addPieceJointe(PieceJointe $pieceJointe): static
+    // public function addPieceJointe(PieceJointe $pieceJointe): static
+    // {
+    //     if (!$this->piece_jointe->contains($pieceJointe)) {
+    //         $this->piece_jointe->add($pieceJointe);
+    //         $pieceJointe->setCourrier($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removePieceJointe(PieceJointe $pieceJointe): static
+    // {
+    //     if ($this->piece_jointe->removeElement($pieceJointe)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($pieceJointe->getCourrier() === $this) {
+    //             $pieceJointe->setCourrier(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    public function setPieceJointe(string $pieceJointe): static
     {
-        if (!$this->piece_jointe->contains($pieceJointe)) {
-            $this->piece_jointe->add($pieceJointe);
-            $pieceJointe->setCourrier($this);
-        }
+        $this->pieceJointe = $pieceJointe;
 
         return $this;
     }
-
-    public function removePieceJointe(PieceJointe $pieceJointe): static
+    public function getPieceJointe()
     {
-        if ($this->piece_jointe->removeElement($pieceJointe)) {
-            // set the owning side to null (unless already changed)
-            if ($pieceJointe->getCourrier() === $this) {
-                $pieceJointe->setCourrier(null);
-            }
-        }
-
-        return $this;
+        return $this->pieceJointe;
     }
+   
 }

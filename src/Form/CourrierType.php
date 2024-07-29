@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\Courrier;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,8 +19,10 @@ class CourrierType extends AbstractType
             ->add('expediteur')
             ->add('destinataire')
             ->add('objet')
-            ->add('description')
+            ->add('description', TextType::class)
             ->add('type_courrier')
+            ->add('pieceJointe')
+            ->add('Enregistrer',SubmitType::class)
         ;
     }
 
