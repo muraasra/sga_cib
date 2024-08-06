@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Courrier;
 use DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\DateTimeType;
 use PHPUnit\TextUI\XmlConfiguration\File as XmlConfigurationFile;
 use Symfony\Component\Form\AbstractType;
@@ -26,6 +27,7 @@ class CourrierType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                'required' => false,
+              
             ])
             ->add('expediteur')
             ->add('destinataire',TextType::class, [
