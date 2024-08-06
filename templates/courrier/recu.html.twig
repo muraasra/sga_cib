@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Historique!{% endblock %}
+
+{% block body %}
+ 
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Historique</h1>
+                <h2> Boite de reception</h2>
+                <p> Vous avez Recu : {{app.user.recus|length}} messages </p>
+            </div>
+
+<div class="col-3">De</div>
+<div class="col-3">Sujet</div>
+<div class="col-3">Date</div>
+<div class="col-3">Actions</div>
+
+{% for message in app.user.recus %}
+
+        {% set bold = "" %}  
+    {% if message.isRead == 0 %}
+        {% set bold = "fw-bold" %}
+    {% endif %}
+
+
+<div class="col-3 {{bold}}" > {{message.envoyeur.nom|capitalize }}</div>
+<div class="col-3 {{bold}}" > <a href="{{ path("app_courrier.view",{id:message.courrierId.id}) }}"> {{message.courrierId.numeroOdre }}</a></div>
+<div class="col-3 {{bold}}" >{{message.date|date }}</div>
+<div class="col-3 {{bold}}" >  {{message.action }} </div>
+
+{% endfor %}
+
+    <div class="col">
+    
+                <a href="{{ path("app_courrier.add")}}" class="btn btn-primary">retour</a>
+                
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}

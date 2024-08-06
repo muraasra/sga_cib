@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SGA_CIB{% endblock %}
+
+{% block body %}
+<div class="row ml-5 mr-5">
+
+        <h1>Transfert d'un courrier</h1>
+       Vous allez transferer le courrier de numero {{courrier.numeroOdre}} et d'objet {{courrier.objet}} À :
+        {{ form(form) }}
+
+
+    
+</div>
+
+
+ 
+{% endblock %}
