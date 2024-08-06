@@ -19,9 +19,7 @@ class Courrier
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[NotBlank(message:"Veillez renseigner ce champ")]
-    #[Length(min:10,max:50, minMessage:"Veuiller entrer au moins 10 caractères ",maxMessage:"Trop de caractères")]
-    private ?string $numero_odre = null;
+     private ?string $numero_odre = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[NotBlank(message:"Veillez renseigner la date de reception")]
@@ -40,12 +38,12 @@ class Courrier
     private ?string $objet = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    // #[NotBlank(message:"Veillez entrer une breve description sur le courrier recu")]
+    #[NotBlank(message:"Veillez entrer une breve description sur le courrier recu")]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'courriers')]
-    #[Length(min:5, minMessage:"Veuiller selectioner un type ")]
-    # #[NotBlank(message:"Veillez renseigner le type de courrier recu")]
+    // #[Length(min:5, minMessage:"Veuiller selectioner un type ")]
+    #[NotBlank(message:"Veillez renseigner le type de courrier recu")]
     private ?TypeCourrier $type_courrier = null;
 
     #[ORM\OneToMany(targetEntity: Historique::class, mappedBy: 'courrier_id')]
@@ -55,6 +53,7 @@ class Courrier
     #private Collection $piece_jointe;
 
     #[ORM\Column(length: 255)]
+    #[NotBlank(message:"Veillez telecharger le fichier ")]
     private ?string $pieceJointe = null;
 
     // public function __construct()

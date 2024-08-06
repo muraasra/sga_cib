@@ -20,7 +20,7 @@ class CourrierDepartType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('numero_odre')
+            
             ->add('date_reception',DateType::class,[
                 'label' => 'Date de réception',
                 'widget' => 'single_text',
