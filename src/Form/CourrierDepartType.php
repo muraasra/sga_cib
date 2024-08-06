@@ -26,6 +26,8 @@ class CourrierDepartType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                'required' => false,
+               'data' => new DateTime(),
+
             ])
             ->add('expediteur',TextType::class, [
                 'attr'=>[

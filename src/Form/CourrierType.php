@@ -27,6 +27,7 @@ class CourrierType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                'required' => false,
+                'data' => new DateTime(),
               
             ])
             ->add('expediteur')
@@ -45,6 +46,9 @@ class CourrierType extends AbstractType
                 'mapped'=>false,
                 'required'=>false,
                 'constraints'=>[
+                    new Assert\NotBlank([
+                        'message' => 'Veuillez télécharger un fichier.',
+                    ]),
                     new File([
                         'maxSize'=>'2048k',
                         'mimeTypes'=>[

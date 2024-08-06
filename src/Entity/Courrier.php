@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 #[ORM\Entity(repositoryClass: CourrierRepository::class)]
 class Courrier
@@ -23,6 +24,7 @@ class Courrier
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[NotBlank(message:"Veillez renseigner la date de reception")]
+    #[NotNull(message:"Veillez renseigner la date de reception")]
     private ?\DateTimeInterface $date_reception = null;
 
     #[ORM\Column(length: 255)]
