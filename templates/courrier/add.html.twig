@@ -5,12 +5,12 @@
 {% block body %}
 <div class="row ml-5 mr-5">
 
-        <h1>Ajouter un courrier</h1>
+        <h1>Ajouter un courrier {{type}}</h1>
          {{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
          
 
 <div class="row">
-    <div class="col-6">{{ form_row(form.numero_odre) }}</div>
+    {# <div class="col-6">{{ form_row(form.numero_odre) }}</div> #}
     <div class="col-6">{{ form_row(form.date_reception) }}</div>
     
 </div>
@@ -22,17 +22,15 @@
     </div>
 <div class="row">
     <div class="col-6">{{ form_row(form.expediteur) }}</div>
-    <div class="col-6">{{ form_row(form.destinataire) }}</div>
-    
+    <div class="col-6">{{ form_row(form.destinataire) }}</div>   
 </div>
 <div class="row">
     <div class="col-6">{{ form_row(form.type_courrier) }}</div>
-    <div class="col-6">{{ form_row(form.pieceJointe) }}</div>
+    <div class="col-6"> {{ form_row(form.brochure , {'attr':{'class':'form-control'}} ) }}</div>
     
 </div>
     {{ form_rest(form) }}
     
-    {{form_errors(form)}}
     {{form_end(form)}}
     
     

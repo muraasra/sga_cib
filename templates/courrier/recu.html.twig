@@ -26,7 +26,7 @@
 
 
 <div class="col-3 {{bold}}" > {{message.envoyeur.nom|capitalize }}</div>
-<div class="col-3 {{bold}}" > <a href="{{ path("app_courrier.view",{id:message.courrierId.id}) }}"> {{message.courrierId.numeroOdre }}</a></div>
+<div class="col-3 {{bold}}" > <a href="{{ path("app_courrier.view",{id:message.id}) }}"> {{message.courrierId.numeroOdre }}</a></div>
 <div class="col-3 {{bold}}" >{{message.date|date }}</div>
 <div class="col-3 {{bold}}" >  {{message.action }} </div>
 

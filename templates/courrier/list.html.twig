@@ -1,38 +1,83 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SGA_CIB{% endblock %}
+{% block title %}SGA_CIB
+{% endblock %}
 
 {% block body %}
-<div class="row ml-5 mr-5">
-
-        <h1>List des courriers</h1>
-
-<table class="table table-striped">
-    <thead>
-    <th>NumeroOdre</th>
-    <th>DateReception</th>
-    <th>Expediteur</th>
-    <th>destinataire</th>
-    </thead>
-    <tbody>
-    {% for courrier in courriers %}
-
-    <tr>
-        <td>{{ courrier.numeroOdre|capitalize }}</td>
-        <td>{{ courrier.dateReception|date }}</td>
-        <td>{{ courrier.expediteur|capitalize }}</td>
-        <td>{{ courrier.destinataire|capitalize }}</td>
-        <td>
-        </td>
-
-    </tr>
-
-    {% endfor %}
-    </tbody>
-</table>
+    <h1>Bienvenue sur SGA_CIB!</h1>
+    <p>Cette application permet de gérer un système de gestion des courriers.</p>	
     
+    <div class="btn btn-primary btn-right">
+       
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+            <i class="bx bx-pencil"></i>
+            <span class="links_name">Courrier</span>
+        </button>
+
+    </div>
+
+<div class="offcanvas offcanvas-top bg-light" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+  <div class="offcanvas-header">
+    <h3 class="offcanvas-title mr-auto ml-auto" id="offcanvasTopLabel">Ajouter un courrier</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mr-auto ml-auto">
+
+    <a href="{{ path("app_courrier.add")}}" class="btn btn-primary {{ active_page == 'add' ? 'active' : '' }}">
+                    <i class="bx bx-pencil"></i>
+                    <span class="links_name">Courrier Entrant</span>
+    </a>
+    <a href="{{ path("app_courrier.addDepart")}}" class="btn btn-primary {{ active_page == 'add' ? 'active' : '' }}">
+                    <i class="bx bx-pencil"></i>
+                    <span class="links_name">Courrier Sortant</span>
+    </a>
+  </div>
 </div>
 
+    <div class="row">
+     {{ form_start(form, {'attr':{'class':'form-horizental'}}) }}
+     <div class="row">
+     <div class="col-3">
+     {{ form_widget(form.numeroOrdre) }}
+     </div>
+     <div class="col-3">
+     {{ form_widget(form.expediteur) }}
+     </div>
+   
+     <div class="col-3">
+     {{ form_widget(form.destinataire) }}
+     </div>
+    
+    <div class="col">{{ form_rest(form) }}</div>
+    </div>
+    </div>
+    
+    <table class="table table-striped">
+        <thead>
+				<th>NumeroOdre</th>
+				<th>DateReception</th>
+				<th>Expediteur</th>
+				<th>destinataire</th>
+		</thead>
 
- 
+        {% for courrier in courriers %}
+       <tr>
+        <td>{{ courrier.numeroOdre|capitalize}}</td> 
+        <td>{{ courrier.dateReception|date}} </td>
+        <td>{{ courrier.expediteur}} </td>
+        <td>{{ courrier.destinataire}} </td>
+        <td>
+		    <a class="btn btn-primary" href="{{ path("app_courrier.transfert", {id:courrier.id}) }}">
+				Transf
+			</a>
+            <a class="btn btn-primary" href="{{ path("app_courrier.listview", {id:courrier.id}) }}">
+				Voir
+			</a>
+		</td>
+        </tr> 
+
+        {% endfor %}
+    
+    
+    </table>
 {% endblock %}

@@ -1,0 +1,23 @@
+
+                {% if unreadNotificationsCount is defined %}
+                    {{ unreadNotificationsCount }}
+                {% endif %}
+            
+    <script>
+        function fetchNotificationCount() {
+            fetch('/notifications/count')
+                .then(response => response.json())
+                .then(data => {
+                    const notificationCountElement = document.getElementById('notification-count');
+                    notificationCountElement.textContent = data.count > 0 ? data.count : '';
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+
+        // Actualiser toutes les 30 secondes (30000 millisecondes)
+        setInterval(fetchNotificationCount, 10000);
+
+        // Actualiser une fois au chargement de la page
+        document.addEventListener('DOMContentLoaded', fetchNotificationCount);
+    </script>
+{% endblock %}

@@ -15,26 +15,26 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 
-class CourrierType extends AbstractType
+class CourrierDepartType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            //->add('numero_odre')
+            ->add('numero_odre')
             ->add('date_reception',DateType::class,[
                 'label' => 'Date de réception',
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                'required' => false,
             ])
-            ->add('expediteur')
-            ->add('destinataire',TextType::class, [
+            ->add('expediteur',TextType::class, [
                 'attr'=>[
 
                  'value' => 'CENADI',
                  'readonly' => true,
                  ]
             ])
+            ->add('destinataire')
             ->add('objet')
             ->add('description', TextType::class)
             ->add('type_courrier')

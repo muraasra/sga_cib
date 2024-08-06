@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="{{ asset("assets/css/sb-admin-2.min.css") }}">
         <link rel="stylesheet" href="{{ asset("assets/css/style.css") }}">
         <title>{% block title %}Welcome!{% endblock %}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
@@ -19,6 +20,7 @@
         {% endblock %}
     </head>
     <body>
+    
         
         <div class="sidebar hidden-print">
         <div class="logo-details">
@@ -26,25 +28,86 @@
             <span class="logo_name">SGA_CIB</span>
         </div>
         <ul class="nav-links">
+            {% if is_granted('ROLE_USER') %}
             <li>
-                <a href="" class="">
+                <a href="{{ path("app_courrier")}}" class="{{ active_page == 'accueil' ? 'active' : '' }}">
                     <i class="bx bx-grid-alt "></i>
                     <span class="links_name">Dashboard</span>
                 </a>
             </li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
             <li>
-                <a href="" class="">
-                    <i class="bx bx-user"></i>
-                    <span class="links_name">Client</span>
-                </a>
-            </li>
-            <li>
-                <a href=""  class="active">
+                <a href="{{ path("app_courrier.list")}}"  class="{{ active_page == 'list' ? 'active' : '' }}">
                     <i class="bx bx-box"></i>
-                    <span class="links_name">Courrier</span>
+                    <span class="links_name">Courriers  <p class="notification">
+                    {% if notif is defined and notif|length > 0 %}
+                        {{notif|length}}
+                    {% endif %}
+                    </p></span>
                 </a>
             </li>
+            
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
             <li>
+                <a href="{{ path("app_user" )}}" class="{{ active_page == 'user' ? 'active' : '' }}">
+                    <i class="bx bx-user"></i>
+                        
+                    
+                    <span class="links_name">Utilisateur  <p id="notificationUser"  class="notification"></p></span>
+                </a>
+            </li>
+            
+            
+            {% endif %}
+            {% if is_granted('ROLE_USER') %}
+            <li>
+            <a href="{{ path("app_courrier.recu")}}" class="{{ active_page == 'recu' ? 'active' : '' }}">
+                <i class="bx bx-message" ></i>
+                <span class="links_name">Notification
+                
+                   <p id="notification"  class="notification"> </p>  
+                
+                <script>
+        function fetchNotificationCount() {
+            fetch('/notifications/count')
+                .then(response => response.json())
+                .then(data => {
+                    const notificationCountElement = document.getElementById('notification');
+                    notificationCountElement.textContent = data.count > 0 ? data.count : '';
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+
+        // Actualiser toutes les 30 secondes (30000 millisecondes)
+        setInterval(fetchNotificationCount, 100000);
+
+        // Actualiser une fois au chargement de la page
+        document.addEventListener('DOMContentLoaded', fetchNotificationCount);
+    </script>
+    <script>
+        function fetchUserVerify() {
+            fetch('/user/verify')
+                .then(response => response.json())
+                .then(data => {
+                    const UserVerifyElement = document.getElementById('notificationUser');
+                    UserVerifyElement.textContent = data.count > 0 ? data.count : '';
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+
+        // Actualiser toutes les 30 secondes (30000 millisecondes)
+        setInterval(fetchUserVerify, 100000);
+
+        // Actualiser une fois au chargement de la page
+        document.addEventListener('DOMContentLoaded', fetchUserVerify);
+    </script>
+                </span>
+            </a>
+            </li>
+            {% endif %}
+            {# <li>
                 <a href=""  class="">
                     <i class="bx bx-list-ul"></i>
                     <span class="links_name">Commandes</span>
@@ -55,43 +118,58 @@
                     <i class="bx bx-pie-chart-alt-2"></i>
                     <span class="links_name">Analyses</span>
                 </a>
-            </li>
-            <li>
+            </li> #}
+            {# <li>
                 <a href="#">
                     <i class="bx bx-coin-stack"></i>
                     <span class="links_name">Stock</span>
                 </a>
-            </li>
+            </li> #}
             <li class="">
                 <a href="#">
-                    <i class="bx bx-book-alt "></i>
-                    <span class="links_name">Tout les commmandes</span>
+                    <i class="bx bx-book-alt"></i>
+                    <span class="links_name">##</span>
                 </a>
             </li>
-            <li>
+            {# <li>
                 <a href="#">
                     <i class="bx bx-user"></i>
                     <span class="links_name">Utilisateur</span>
                 </a>
-            </li>
-            <li>
-            <a href="#">
-                <i class="bx bx-message" ></i>
-                <span class="links_name">Messages</span>
-            </a>
-            </li>
-            <li>
+            </li> #}
+            
+            {# <li>
                 <a href="#">
                     <i class="bx bx-cog"></i>
                     <span class="links_name">Configuration</span>
                 </a>
+            </li> #}
+            {% if app.user %}
+            <li class="log_out mb-3">
+            <a href="">
+                <i class="bx bx-user"></i>
+                <span class="links_name">Connecté : <strong> {{ app.user.matricule }}</strong></span>
+                 
+                 </a>
             </li>
+
+            {% endif %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <li class="log_out">
-                <a href="#">
+                <a href="{{ path("app_logout")}}">
                     <i class="bx bx-log-out"></i>
                     <span class="links_name">Déconnexion</span>
                 </a>
             </li>
+            {% else %}
+            <li class="log_out">
+               <a href="{{ path('app_login') }}"> 
+               <i class="bx bx-log-in"></i>
+                
+                <span class="links_name">Connexion</span></a>
+            </li>
+
+            {% endif %}
         </ul>
     </div>
     <section class="home-section">
@@ -107,11 +185,35 @@
                 <a href=""><i class="bx bx-search mt-2 "></i></a>
             </div>
             <div class="profile-details">
-                <img src="images/profile.jpg" alt="">
-                <span class="admin_name">Tayou</span>
-                <i class="bx bx-chevron-down"></i>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %} 
+                <img src="{{asset("assets/image/noUser.jpg")}}" alt="">
+                
+                {% else %}
+                <img src="{{asset("assets/image/noUser.jpg")}}" alt="">
+                 {% endif %}
+                 {# Tayou
+                 <i class="bx bx-chevron-down"></i>
+                 #}
+                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <li class="nav-item dropdown mb-4">
+                        <a class="nav-link dropdown-toggle admin_name" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                           <span class="admin_name"><strong>{{ app.user.nom }}</strong></span>
+                        
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{{path("app_logout")}}">Logout</a></li>
+                        </ul>
+                        </a>
+                </li>
+                {% else %}
+                <li class="nav-item mb-4">
+                    <a class="nav-link" href="{{ path('app_login') }}" style="color:black">
+                    <span class="links_name">Login</span>
+                    </a>
+                </li>
+                {% endif %}
             </div>
         </nav>
+          <br> <br> <br> <br> 
            {% for message in app.session.FlashBag.get('info') %}
                 <div class="alert alert-info">{{message}} </div>
                 {% endfor %}
@@ -121,7 +223,7 @@
                 {% for message in app.session.FlashBag.get('success') %}
                 <div class="alert alert-success">{{message}}</div>
                 {% endfor %}
-    <br> <br> <br> <br> 
+    
     
 
     {% block body %}      {% endblock %}
@@ -139,6 +241,7 @@
     };
 </script>
 <script type="text/javascript" src="{{ asset("assets/js/sb-admin-2.min.js") }}" ></script> 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 </body>
 </html>

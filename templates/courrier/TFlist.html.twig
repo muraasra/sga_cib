@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SGA_CIB
+{% endblock %}
+
+{% block body %}
+	<div class="row ml-5 mr-5">
+
+		<h1>List des courriers</h1>
+
+		<table class="table table-striped">
+			{{ form_start(form) }}
+			<thead>
+				<th>
+					{{ form(form.numeroOrdre) }}
+				</th>
+				<th>
+					{{ form(form.expediteur) }}
+				</th>
+				<th>
+					{{ form(form.destinataire) }}
+				</th>
+				<th>
+					{{ form_rest(form) }} 
+				</th>
+
+				{{ form_end(form) }}
+
+				
+			</thead>
+			<thead>
+				<th>NumeroOdre</th>
+				<th>DateReception</th>
+				<th>Expediteur</th>
+				<th>destinataire</th>
+			</thead>
+			<tbody>
+				{% for courrier in courriers %}
+
+					<tr>
+						<td>{{ courrier.numeroOdre|capitalize }}</td>
+						<td>{{ courrier.dateReception|date }}</td>
+						<td>{{ courrier.expediteur|capitalize }}</td>
+						<td>{{ courrier.destinataire|capitalize }}</td>
+						<td>
+							<a class="btn btn-primary" href="{{ path("app_courrier.transfert", {id:courrier.id}) }}">
+								Transf
+							</a>
+						</td>
+
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	</div>
+
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateur!{% endblock %}
+
+{% block body %}
+    <h1>Utilisateur</h1>
+    <div class="btn btn-primary btn-right">
+        <a  href="{{ path("app_register" )}}" class="{{ active_page == 'register' ? 'active' : '' }}">
+            <i class="bx bx-pencil" ></i>
+            <span class="" >Utilisateur</span>
+        </a>
+    </div>
+    <table class="table table-striped">
+        <thead>
+				<th>Matricule</th>
+				<th>Nom</th>
+				<th>Role</th>
+				<th>Email</th>
+		</thead>
+
+        {% for user in users %}
+       <tr>
+        <td>{{ user.matricule}}</td> 
+        <td>{{ user.nom|capitalize}} </td>
+        <td> {% for role in user.roles %}
+            {{ role}}
+        {% endfor %} 
+        </td>
+        <td>{{ user.email}} </td>
+        <td>
+		    <a class="btn btn-danger" href="#">
+				Delete
+			</a>
+            <a class="btn btn-dark" href="{{ path("app_register", {id:user.id}) }}">
+				Update
+			</a>
+            {% if user.isVerified %}
+                ✅
+                {% else %}
+            <a class="btn btn-success" href="{{ path('app_user.verify', {'id': user.id}) }}">Verifier</a>
+
+            {% endif %}
+		</td>
+        </tr> 
+
+        {% endfor %}
+    
+    
+    </table>
+
+{% endblock %}

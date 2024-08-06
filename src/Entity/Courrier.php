@@ -55,7 +55,6 @@ class Courrier
     #private Collection $piece_jointe;
 
     #[ORM\Column(length: 255)]
-    #[NotBlank(message:"Veillez renseigner le type de courrier recu")]
     private ?string $pieceJointe = null;
 
     // public function __construct()
@@ -223,5 +222,6 @@ class Courrier
     {
         return $this->pieceJointe;
     }
+    
    
 }
