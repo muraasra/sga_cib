@@ -23,6 +23,16 @@ class SecurityController extends AbstractController
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'active_page' => '']);
     }
+    #[Route(path: '/redirect', name: 'app_redirect')]
+    public function redirectAfterLogin(): Response
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_courrier.list');
+        }
+
+        return $this->redirectToRoute('app_courrier');
+    }
+
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
