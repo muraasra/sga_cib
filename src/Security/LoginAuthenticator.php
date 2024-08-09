@@ -49,7 +49,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
         // if ($this->isGranted('ROLE_ADMIN')) {
         //     return $this->redirectToRoute('admin_dashboard');
-        // }
+        
 
         // return $this->redirectToRoute('user_homepage');
     
