@@ -47,7 +47,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
         // For example:
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        // if ($this->isGranted('ROLE_ADMIN')) {
+    // if ($this->isGranted('ROLE_ADMIN')) {
         
 
         // return $this->redirectToRoute('user_homepage');
