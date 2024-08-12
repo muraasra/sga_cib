@@ -50,6 +50,23 @@ class Stagiaire
     #[ORM\Column(length: 255)]
     private ?string $classe = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $path_cv = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $path_lettre_motivation = null;
+
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $is_accept = null;
+
+    #[ORM\ManyToOne(inversedBy: 'stagiaires')]
+    private ?User $encadreur = null;
+    public function __construct()
+    {
+        $this->is_accept = 0; // par défaut, le stagiaire n'est pas accepté
+        
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -195,6 +212,54 @@ class Stagiaire
     public function setClasse(string $classe): static
     {
         $this->classe = $classe;
+
+        return $this;
+    }
+
+    public function getPathCv(): ?string
+    {
+        return $this->path_cv;
+    }
+
+    public function setPathCv(?string $path_cv): static
+    {
+        $this->path_cv = $path_cv;
+
+        return $this;
+    }
+
+    public function getPathLettreMotivation(): ?string
+    {
+        return $this->path_lettre_motivation;
+    }
+
+    public function setPathLettreMotivation(?string $path_lettre_motivation): static
+    {
+        $this->path_lettre_motivation = $path_lettre_motivation;
+
+        return $this;
+    }
+
+    public function getIsAccept(): ?int
+    {
+        return $this->is_accept;
+    }
+
+    public function setIsAccept(int $is_accept): static
+    {
+        $this->is_accept = $is_accept;
+
+        return $this;
+    }
+
+    public function getEncadreur(): ?User
+    {
+        return $this->encadreur;
+    }
+
+    public function setEncadreur(?User $encadreur): static
+    {
+        $this->encadreur = $encadreur;
 
         return $this;
     }

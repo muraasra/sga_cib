@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SGA_CIB
+{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue sur SGA_CIB!</h1>
+    <p>Cette application permet de gérer un système de gestion des stagiaires.</p>	
+    
+    <div class="btn btn-primary btn-right">
+       
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+            <i class="bx bx-pencil"></i>
+            <span class="links_name">Candidature</span>
+        </button>
+
+    </div>
+
+<div class="offcanvas offcanvas-top bg-light" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+  <div class="offcanvas-header">
+    <h3 class="offcanvas-title mr-auto ml-auto" id="offcanvasTopLabel">Ajouter une candidature</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mr-auto ml-auto">
+
+    <a href="{{ path("app_stagiaire.canditatureSec")}}" class="btn btn-primary {{ active_page == 'add' ? 'active' : '' }}">
+                    <i class="bx bx-pencil"></i>
+                    <span class="links_name">Du Secondaire</span>
+    </a>
+    <a href="{{ path("app_stagiaire.canditatureSup")}}" class="btn btn-primary {{ active_page == 'add' ? 'active' : '' }}">
+                    <i class="bx bx-pencil"></i>
+                    <span class="links_name">Du Superieur</span>
+    </a>
+  </div>
+</div>
+
+    {# <div class="row">
+     {{ form_start(form, {'attr':{'class':'form-horizental'}}) }}
+     <div class="row">
+     <div class="col-3">
+     {{ form_widget(form.numeroOrdre) }}
+     </div>
+     <div class="col-3">
+     {{ form_widget(form.expediteur) }}
+     </div>
+   
+     <div class="col-3">
+     {{ form_widget(form.destinataire) }}
+     </div>
+    
+    <div class="col">{{ form_rest(form) }}</div>
+    </div> #}
+    
+    <table class="table table-striped">
+        <thead>
+				<th>Nom</th>
+				<th>Filiere</th>
+				<th>Etablissement</th>
+				<th>Niveau</th>
+		</thead>
+
+        {% for stagiaire in stagiaires %}
+       <tr>
+        <td>{{ stagiaire.nom|capitalize}}</td> 
+        <td>{{ stagiaire.filiere|capitalize}} </td>
+        <td>{{ stagiaire.etablissement|capitalize}} </td>
+        <td>{{ stagiaire.classe|capitalize}} </td>
+        <td>
+		     <a class="btn btn-primary" href="{{ path("app_stagiaire.detailCandidature", {id:stagiaire.id}) }}"> 
+				detail
+			</a>
+            <a class="btn btn-primary" href="{#{{ path("app_stagiaire.supprimer", {id:stagiaire.id}) }}#}">
+				supprimer
+			</a>
+		</td>
+        </tr> 
+
+        {% endfor %}
+    
+    
+    </table>
+{% endblock %}

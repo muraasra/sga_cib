@@ -49,10 +49,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\OneToMany(targetEntity: Stagiaire::class, mappedBy: 'encadreur')]
+    private Collection $stagiaires;
+
     public function __construct()
     {
         $this->envois = new ArrayCollection();
         $this->recus = new ArrayCollection();
+        $this->stagiaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -234,7 +238,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, Stagiaire>
+     */
+    public function getStagiaires(): Collection
+    {
+        return $this->stagiaires;
+    }
 
+    public function addStagiaire(Stagiaire $stagiaire): static
+    {
+        if (!$this->stagiaires->contains($stagiaire)) {
+            $this->stagiaires->add($stagiaire);
+            $stagiaire->setEncadreur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStagiaire(Stagiaire $stagiaire): static
+    {
+        if ($this->stagiaires->removeElement($stagiaire)) {
+            // set the owning side to null (unless already changed)
+            if ($stagiaire->getEncadreur() === $this) {
+                $stagiaire->setEncadreur(null);
+            }
+        }
+
+        return $this;
+    }
+    public function __toString(): string
+    {
+        return (string) $this->nom;
+    }
 
     
 }

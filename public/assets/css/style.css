@@ -321,6 +321,7 @@ nav .profile-details i {
   position: absolute;
   top: 100px;
   right: 5px;
+  width: auto !important;
 }
 .btn-right a i{
   color: white;

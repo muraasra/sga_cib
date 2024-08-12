@@ -17,23 +17,19 @@ class Helpers {
         
     }
     
-    public function __Helpers(){
-        
-    }
-    public function sayCc()
-    {
-        return "cc";
-       
-    }
-    public function getUser(): User 
-    {
-        if($this->security->isGranted('ROLE_ADMIN'))
-       { 
-         $user = $this->security->getUser();
-         if($user instanceof User){
-            return $user ;
-         }
-    }
+    public function genererMotDePasse($longueur = 8) {
+        $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $symboles = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+        $motDePasse = '';
+        $maxIndex = strlen($caracteres) - 1;
+    
+        for ($i = 0; $i < $longueur; $i++) {
+            $indexAleatoire = random_int(0, $maxIndex);
+           if ($i == $longueur -2 )$motDePasse .= $symboles[random_int(0,(strlen($symboles)-1))];
+            $motDePasse .= $caracteres[$indexAleatoire];
+        }
+    
+        return $motDePasse;
     }
 
 }
