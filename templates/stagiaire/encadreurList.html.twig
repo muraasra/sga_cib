@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Stagiaire!{% endblock %}
+
+{% block body %}
+<div class="container">   
+ <h1>List de vos Stagiaire!</h1>
+
+    <table class="table table-striped">
+        <thead>
+				<th>Nom</th>
+				<th>Prenom</th>
+				<th>Filiere</th>
+				<th>Niveau</th>
+				<th>Action</th>
+		</thead>
+        {% for stagiaire in app.user.stagiaires %}
+        <tr>
+            <td>{{stagiaire.nom|capitalize}}</td>
+            <td>{{stagiaire.prenom|capitalize}}</td>
+            <td>{{stagiaire.filiere|capitalize}}</td>
+            <td>{{stagiaire.classe|capitalize}}</td>
+            <td>
+            <a href="">Evaluer</a>
+            </td>
+        </tr>
+        
+            
+        {% endfor %}
+
+    
+    
+    
+    
+   
+
+
+
+    </table>
+
+</div>
+{% endblock %}

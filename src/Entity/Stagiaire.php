@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StagiaireRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -61,9 +63,19 @@ class Stagiaire
 
     #[ORM\ManyToOne(inversedBy: 'stagiaires')]
     private ?User $encadreur = null;
+
+    #[ORM\OneToMany(targetEntity: Stage::class, mappedBy: 'stagiaire')]
+    private Collection $stages;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_debut = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_fin = null;
     public function __construct()
     {
         $this->is_accept = 0; // par défaut, le stagiaire n'est pas accepté
+        $this->stages = new ArrayCollection();
         
     }
 
@@ -260,6 +272,60 @@ class Stagiaire
     public function setEncadreur(?User $encadreur): static
     {
         $this->encadreur = $encadreur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Stage>
+     */
+    public function getStages(): Collection
+    {
+        return $this->stages;
+    }
+
+    public function addStage(Stage $stage): static
+    {
+        if (!$this->stages->contains($stage)) {
+            $this->stages->add($stage);
+            $stage->setStagiaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStage(Stage $stage): static
+    {
+        if ($this->stages->removeElement($stage)) {
+            // set the owning side to null (unless already changed)
+            if ($stage->getStagiaire() === $this) {
+                $stage->setStagiaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDateDebut(): ?\DateTimeInterface
+    {
+        return $this->date_debut;
+    }
+
+    public function setDateDebut(?\DateTimeInterface $date_debut): static
+    {
+        $this->date_debut = $date_debut;
+
+        return $this;
+    }
+
+    public function getDateFin(): ?\DateTimeInterface
+    {
+        return $this->date_fin;
+    }
+
+    public function setDateFin(?\DateTimeInterface $date_fin): static
+    {
+        $this->date_fin = $date_fin;
 
         return $this;
     }

@@ -166,12 +166,12 @@ class StagiaireController extends AbstractController
         return $this->redirectToRoute('app_stagiaire.listCandidature');
     }
     #[Route('/stagiaire/encadreur/list', name: 'app_stagiaire.encadreurList')]
-    public function encadreurList($id, EntityManagerInterface $entityManager): Response{
-        $stagiaire = $entityManager->getRepository(Stagiaire::class)->find($id);
-        $stagiaire->setIsAccept(-1);
-        $entityManager->flush();
-        return $this->render("stagiaire/encadreurList.html.twig");
+    public function encadreurList( EntityManagerInterface $entityManager): Response{
+        
+        return $this->render("stagiaire/encadreurList.html.twig",[
+            'active_page' => 'stagiaire',
+        ]);
     }
-
+   
 
 }
