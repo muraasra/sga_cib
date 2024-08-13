@@ -156,7 +156,6 @@ class StagiaireController extends AbstractController
 
     //         return $this->redirectToRoute('app_stagiaire.listCandidature');
     //     }
-        
     // }
     #[Route('/stagiaire/candidature/rejet/{id}', name: 'app_stagiaire.rejetCandidature')]
     public function rejetCandidature($id, EntityManagerInterface $entityManager): Response{
