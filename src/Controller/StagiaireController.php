@@ -153,7 +153,6 @@ class StagiaireController extends AbstractController
     //         $stagiaire->setEncadreur($form->get("encadreur")->getData());
     //         $stagiaire->setIsAccept(1);
     //         $entityManager->flush();
-
     //         return $this->redirectToRoute('app_stagiaire.listCandidature');
     //     }
     // }
