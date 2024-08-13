@@ -24,28 +24,28 @@ class Evaluation
     private ?string $ponctualite = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $dis_pro_res_reg_sec = null;
+    private ?string $disponibilite = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $int_ent = null;
+    private ?string $interet = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $res_hie = null;
+    private ?string $respect = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $esp_equi_ini = null;
+    private ?string $esprit = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $apt_exe_tac = null;
+    private ?string $aptitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $org_pos_tra = null;
+    private ?string $organisation = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $app_soi_exe_tac = null;
+    private ?string $application = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $rec_pro_the = null;
+    private ?string $recherche = null;
 
     public function getId(): ?int
     {
@@ -88,98 +88,98 @@ class Evaluation
         return $this;
     }
 
-    public function getDisProResRegSec(): ?string
+    public function getDisponibilite(): ?string
     {
-        return $this->dis_pro_res_reg_sec;
+        return $this->disponibilite;
     }
 
-    public function setDisProResRegSec(?string $dis_pro_res_reg_sec): static
+    public function setDisponibilite(?string $disponibilite): static
     {
-        $this->dis_pro_res_reg_sec = $dis_pro_res_reg_sec;
+        $this->disponibilite = $disponibilite;
 
         return $this;
     }
 
-    public function getIntEnt(): ?string
+    public function getInteret(): ?string
     {
-        return $this->int_ent;
+        return $this->interet;
     }
 
-    public function setIntEnt(?string $int_ent): static
+    public function setInteret(?string $interet): static
     {
-        $this->int_ent = $int_ent;
+        $this->interet = $interet;
 
         return $this;
     }
 
-    public function getResHie(): ?string
+    public function getRespect(): ?string
     {
-        return $this->res_hie;
+        return $this->respect;
     }
 
-    public function setResHie(?string $res_hie): static
+    public function setRespect(?string $respect): static
     {
-        $this->res_hie = $res_hie;
+        $this->respect = $respect;
 
         return $this;
     }
 
-    public function getEspEquiIni(): ?string
+    public function getEsprit(): ?string
     {
-        return $this->esp_equi_ini;
+        return $this->esprit;
     }
 
-    public function setEspEquiIni(?string $esp_equi_ini): static
+    public function setEsprit(?string $esprit): static
     {
-        $this->esp_equi_ini = $esp_equi_ini;
+        $this->esprit = $esprit;
 
         return $this;
     }
 
-    public function getAptExeTac(): ?string
+    public function getAptitude(): ?string
     {
-        return $this->apt_exe_tac;
+        return $this->aptitude;
     }
 
-    public function setAptExeTac(?string $apt_exe_tac): static
+    public function setAptitude(?string $aptitude): static
     {
-        $this->apt_exe_tac = $apt_exe_tac;
+        $this->aptitude = $aptitude;
 
         return $this;
     }
 
-    public function getOrgPosTra(): ?string
+    public function getOrganisation(): ?string
     {
-        return $this->org_pos_tra;
+        return $this->organisation;
     }
 
-    public function setOrgPosTra(?string $org_pos_tra): static
+    public function setOrganisation(?string $organisation): static
     {
-        $this->org_pos_tra = $org_pos_tra;
+        $this->organisation = $organisation;
 
         return $this;
     }
 
-    public function getAppSoiExeTac(): ?string
+    public function getApplication(): ?string
     {
-        return $this->app_soi_exe_tac;
+        return $this->application;
     }
 
-    public function setAppSoiExeTac(?string $app_soi_exe_tac): static
+    public function setApplication(?string $application): static
     {
-        $this->app_soi_exe_tac = $app_soi_exe_tac;
+        $this->application = $application;
 
         return $this;
     }
 
-    public function getRecProThe(): ?string
+    public function getRecherche(): ?string
     {
-        return $this->rec_pro_the;
+        return $this->recherche;
     }
 
-    public function setRecProThe(?string $rec_pro_the): static
+    public function setRecherche(?string $recherche): static
     {
-        $this->rec_pro_the = $rec_pro_the;
+        $this->recherche = $recherche;
 
         return $this;
     }
