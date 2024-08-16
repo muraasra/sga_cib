@@ -124,6 +124,7 @@ class StagiaireController extends AbstractController
             $user->setPrenom($stagiaire->getPrenom());
             $user->setEmail($stagiaire->getEmail());
             $user->setPassword($this->hasher->hashPassword($user, $mdp));
+            // creation du stage 
             $a=$doctrine->getManager()->persist($user);
             $entityManager->flush();
             $this->addFlash('success',"Le stagiaire ".$stagiaire->getNom()." à pour encadreur ".$encadreur.".".$user->getMatricule()."/".$mdp);
