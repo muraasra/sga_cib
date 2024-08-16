@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Evaluation;
 use App\Entity\Stagiaire;
 use App\Entity\User;
+use App\Form\EvaluationType;
 use App\Form\HistoriqueType;
 use App\Form\StagiaireSecType;
 use App\Form\StagiaireType;
@@ -114,8 +116,9 @@ class StagiaireController extends AbstractController
             $stagiaire->setIsAccept(1);
             
             $mdp=$helpers->genererMotDePasse();
-            $user = new User();
+            //creation de L'utilisateur
             // substr($stagiaire->getNom(), 2, 2).substr($stagiaire->getPrenom(), 1, 2).substr(uniqid(),10,2)
+            $user = new User();
             $user->setMatricule(strtoupper($stagiaire->getNom()));
             $user->setNom($stagiaire->getNom());
             $user->setPrenom($stagiaire->getPrenom());
@@ -168,6 +171,16 @@ class StagiaireController extends AbstractController
         
         return $this->render("stagiaire/encadreurList.html.twig",[
             'active_page' => 'stagiaire',
+        ]);
+    } 
+    #[Route('/stagiaire/evaluation', name: 'app_stagiaire.evaluation')]
+    public function EvaluationStagiaire(Request $request,): Response{
+        $evaluation = new Evaluation();
+        $form=$this->createForm(EvaluationType::class, $evaluation);
+        $form->handleRequest($request);
+        return $this->render("stagiaire/evaluation.html.twig",[
+            'active_page' => 'stagiaire',
+           'form' => $form->createView(),
         ]);
     }
    

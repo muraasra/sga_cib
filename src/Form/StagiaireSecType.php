@@ -103,6 +103,18 @@ class StagiaireSecType extends AbstractType
                         ]),
                     
                     ],],)
+            ->add('date_debut', DateType::class,[
+                    'label'=>'Date debut de stage',
+                    'widget' => 'single_text',
+                    'format' => 'yyyy-MM-dd',
+                    'attr' => ['class' => 'js-datepicker'],
+                ])
+            ->add('date_fin', DateType::class,[
+                'label'=>'Date fin de stage',
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+                'attr' => ['class' => 'js-datepicker'],
+                ])
             
             ->add('enregistrer',SubmitType::class)
         ;

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Stagiaire!{% endblock %}
+
+{% block body %}
+<div class="container"> <h1>Evaluation du stagiaire ****</h1>
+{{ form_start(form,{'attr':[
+        'class:horizontal'
+    ]}) }}
+    <div class="row">
+<div class="col-lg-3 col-md-4 col-sm-6">
+{{ form_row(form.assuiduite) }}
+</div>
+
+<div class="col-lg-3 col-md-4 col-sm-6">
+{{ form_row(form.ponctualite) }}
+</div> 
+<div class="col-lg-3 col-md-4 col-sm-6">
+{{ form_row(form.disponibilite) }}
+</div>
+
+<div class="col-lg-3 col-md-4 col-sm-6">
+{{ form_row(form.interet) }}
+</div>
+<div class="col-lg-3 col-md-4 col-sm-6">
+{{ form_row(form.respect) }}
+</div>
+<div class="col-lg-3 col-md-4 col-sm-6">
+{{ form_row(form.esprit) }}
+</div>
+<div class="col-lg-3 col-md-4 col-sm-6">
+{{ form_row(form.aptitude) }}
+</div>
+<div class="col-lg-3 col-md-4 col-sm-6"> 
+{{ form_row(form.organisation) }}
+</div>
+<div class="col-lg-3 col-md-4 col-sm-6">
+{{ form_row(form.application) }}
+</div>
+<div class="col-lg-3 col-md-4 col-sm-6">
+{{ form_row(form.recherche) }}
+</div>
+<div class="col-lg-3 col-md-4 col-sm-6">
+{{ form_row(form.stage) }}
+</div>
+</div>
+
+
+    {{ form_rest(form) }}
+</div>
+{% endblock %}

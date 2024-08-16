@@ -24,7 +24,7 @@ class Stage
     private ?string $theme = null;
 
     #[ORM\ManyToOne(inversedBy: 'stages')]
-    private ?stagiaire $stagiaire = null;
+    private ?Stagiaire $stagiaire = null;
 
     #[ORM\OneToOne(mappedBy: 'stage', cascade: ['persist', 'remove'])]
     private ?Evaluation $evaluation = null;
