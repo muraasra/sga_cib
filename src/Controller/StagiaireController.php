@@ -126,6 +126,7 @@ class StagiaireController extends AbstractController
             $user->setEmail($stagiaire->getEmail());
             $user->setPassword($this->hasher->hashPassword($user, $mdp));
             $user->setStagiaire($stagiaire);
+            $user->setRoles('ROLE_STAGIAIRE');
             // creation du stage 
             $stage=new Stage();
             $stage->setStagiaire($stagiaire);
