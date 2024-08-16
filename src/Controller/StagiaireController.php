@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Entity\Stage;
 use App\Entity\Stagiaire;
 use App\Entity\User;
 use App\Form\EvaluationType;
@@ -124,8 +125,15 @@ class StagiaireController extends AbstractController
             $user->setPrenom($stagiaire->getPrenom());
             $user->setEmail($stagiaire->getEmail());
             $user->setPassword($this->hasher->hashPassword($user, $mdp));
+            $user->setStagiaire($stagiaire);
             // creation du stage 
-            $a=$doctrine->getManager()->persist($user);
+            $stage=new Stage();
+            $stage->setStagiaire($stagiaire);
+            $stage->setDateDebut($stagiaire->getDateDebut());
+            $stage->setDateFin($stagiaire->getDateFin());
+            
+            $doctrine->getManager()->persist($user);
+            $doctrine->getManager()->persist($stage);
             $entityManager->flush();
             $this->addFlash('success',"Le stagiaire ".$stagiaire->getNom()." à pour encadreur ".$encadreur.".".$user->getMatricule()."/".$mdp);
             return $this->redirectToRoute('app_stagiaire.listCandidature');

@@ -72,6 +72,9 @@ class Stagiaire
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_fin = null;
+
+    #[ORM\OneToOne(mappedBy: 'stagiaire', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
     public function __construct()
     {
         $this->is_accept = 0; // par défaut, le stagiaire n'est pas accepté
@@ -326,6 +329,28 @@ class Stagiaire
     public function setDateFin(?\DateTimeInterface $date_fin): static
     {
         $this->date_fin = $date_fin;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setStagiaire(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getStagiaire() !== $this) {
+            $user->setStagiaire($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }

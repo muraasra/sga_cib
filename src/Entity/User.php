@@ -52,6 +52,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Stagiaire::class, mappedBy: 'encadreur')]
     private Collection $stagiaires;
 
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Stagiaire $stagiaire = null;
+
     public function __construct()
     {
         $this->envois = new ArrayCollection();
@@ -270,6 +273,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return (string) $this->nom;
+    }
+
+    public function getStagiaire(): ?Stagiaire
+    {
+        return $this->stagiaire;
+    }
+
+    public function setStagiaire(?Stagiaire $stagiaire): static
+    {
+        $this->stagiaire = $stagiaire;
+
+        return $this;
     }
 
     
