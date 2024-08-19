@@ -21,7 +21,7 @@
             <td>{{stagiaire.filiere|capitalize}}</td>
             <td>{{stagiaire.classe|capitalize}}</td>
             <td>
-            <a href="">Evaluer</a>
+            <a href="{{path("app_stagiaire.evaluation", {id:stagiaire.id})}}">Evaluer</a>
             </td>
         </tr>
         

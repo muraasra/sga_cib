@@ -5,6 +5,31 @@
 {% block body %}
 <div class="container">
 <h1>Demande de stage</h1>
+<div class="btn btn-primary btn-right">
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+        <i class="bx bx-pencil"></i>
+        <span class="links_name">Ajouter une cadidature</span>
+    </button>
+</div>
+<div class="offcanvas offcanvas-top bg-light" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+  <div class="offcanvas-header">
+    <h3 class="offcanvas-title mr-auto ml-auto" id="offcanvasTopLabel">Ajouter une Candidature</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mr-auto ml-auto">
+
+    <a href="{{ path("app_stagiaire.canditatureSec")}}" class="btn btn-primary {{ active_page == 'add' ? 'active' : '' }}">
+                    <i class="bx bx-pencil"></i>
+                    <span class="links_name">Candidature secondaire</span>
+    </a>
+    <a href="{{ path("app_stagiaire.canditatureSup")}}" class="btn btn-primary {{ active_page == 'add' ? 'active' : '' }}">
+                    <i class="bx bx-pencil"></i>
+                    <span class="links_name">Candidature superieur</span>
+    </a>
+  </div>
+</div>
+
+{{ path("app_stagiaire.listCandidature")}}
 {{ form_start(form) }}
     <div class="row">
         <div class="col-6">{{ form_row(form.nom) }}</div>
