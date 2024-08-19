@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Evaluation;
+use PhpParser\Node\Stmt\Label;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,6 +15,10 @@ class EvaluationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('theme',TextType::class,[
+                'label' => 'Theme',
+                'placeholder' => 'Theme de stage',
+            ])
             ->add('assuiduite', ChoiceType::class,[
                 'label'=>'Assuiduite',
                 'choices' =>[

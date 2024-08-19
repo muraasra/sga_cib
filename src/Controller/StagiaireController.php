@@ -14,6 +14,7 @@ use App\Form\TuteurFormType;
 use App\Repository\StagiaireRepository;
 use App\Service\Helpers;
 use App\Service\UploadsFile;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -126,7 +127,7 @@ class StagiaireController extends AbstractController
             $user->setEmail($stagiaire->getEmail());
             $user->setPassword($this->hasher->hashPassword($user, $mdp));
             $user->setStagiaire($stagiaire);
-            $user->setRoles('ROLE_STAGIAIRE');
+            $user->setRoles(['ROLE_STAGIAIRE']);
             // creation du stage 
             $stage=new Stage();
             $stage->setStagiaire($stagiaire);
@@ -183,11 +184,21 @@ class StagiaireController extends AbstractController
             'active_page' => 'stagiaire',
         ]);
     } 
-    #[Route('/stagiaire/evaluation', name: 'app_stagiaire.evaluation')]
-    public function EvaluationStagiaire(Request $request,): Response{
+    #[Route('/stagiaire/evaluation/{id}', name: 'app_stagiaire.evaluation')]
+    public function EvaluationStagiaire($id,Request $request,ManagerRegistry $doctrine, EntityManager $manager): Response{
         $evaluation = new Evaluation();
         $form=$this->createForm(EvaluationType::class, $evaluation);
         $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $stage=$manager->getRepository(Stage::class)->find($id);
+            $stage->setTheme($form->get("theme")->getData());
+            $evaluation->setStage($stage); // on met l'id du stagiaire en cours en evaluation
+            $entityManager=$doctrine->getManager();
+            $entityManager->persist($evaluation);
+            $entityManager->flush();
+            $this->addFlash('success',"Evaluation enregistrée");
+            return $this->redirectToRoute('app_stagiaire.evaluation');
+        }
         return $this->render("stagiaire/evaluation.html.twig",[
             'active_page' => 'stagiaire',
            'form' => $form->createView(),
