@@ -21,7 +21,9 @@
             <td>{{stagiaire.filiere|capitalize}}</td>
             <td>{{stagiaire.classe|capitalize}}</td>
             <td>
-            <a href="{{path("app_stagiaire.evaluation", {id:stagiaire.id})}}">Evaluer</a>
+            {% for stage in stagiaire.stages %}
+            <a href="{{path("app_stagiaire.evaluation", {id:stage.id})}}">Evaluer</a>
+             {% endfor %}
             </td>
         </tr>
         

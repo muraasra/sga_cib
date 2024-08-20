@@ -8,6 +8,7 @@ use App\Entity\Stagiaire;
 use App\Entity\User;
 use App\Form\EvaluationType;
 use App\Form\HistoriqueType;
+use App\Form\StageType;
 use App\Form\StagiaireSecType;
 use App\Form\StagiaireType;
 use App\Form\TuteurFormType;
@@ -184,9 +185,33 @@ class StagiaireController extends AbstractController
             'active_page' => 'stagiaire',
         ]);
     } 
+    #[Route('/stagiaire/stage/{id}', name: 'app_stagiaire.stage')]
+    public function stagiaireStage($id, Request $request,EntityManagerInterface $manager, ManagerRegistry $doctrine): Response{
+        $stage=$manager->getRepository(Stage::class)->find($id);
+        $form=$this->createForm(StageType::class, $stage);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager=$doctrine->getManager();
+            $entityManager->persist($stage);
+            $entityManager->flush();
+            $this->addFlash('success',"Stage Modifié avec success");
+            return $this->redirectToRoute('app_stagiaire.encadreurList');
+        
+
+        }
+        return $this->render("stagiaire/stage.html.twig",[
+            'active_page' => 'stage',
+            'form'=>$form->createView(),
+        ]);
+    } 
     #[Route('/stagiaire/evaluation/{id}', name: 'app_stagiaire.evaluation')]
-    public function EvaluationStagiaire($id,Request $request,ManagerRegistry $doctrine, EntityManager $manager): Response{
+    public function EvaluationStagiaire($id,Request $request,ManagerRegistry $doctrine, EntityManagerInterface $manager): Response{
+        $evaluation = $manager->getRepository(Evaluation::class)->findBy([
+            "stagiaire_id"=>$id]);
+        if (empty($evaluation)) {
         $evaluation = new Evaluation();
+        }
         $form=$this->createForm(EvaluationType::class, $evaluation);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){

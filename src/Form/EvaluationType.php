@@ -15,10 +15,7 @@ class EvaluationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('theme',TextType::class,[
-                'label' => 'Theme',
-                'placeholder' => 'Theme de stage',
-            ])
+            
             ->add('assuiduite', ChoiceType::class,[
                 'label'=>'Assuiduite',
                 'choices' =>[
