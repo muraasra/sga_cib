@@ -208,8 +208,8 @@ class StagiaireController extends AbstractController
     #[Route('/stagiaire/evaluation/{id}', name: 'app_stagiaire.evaluation')]
     public function EvaluationStagiaire($id,Request $request,ManagerRegistry $doctrine, EntityManagerInterface $manager): Response{
         $evaluation = $manager->getRepository(Evaluation::class)->findBy([
-            "stagiaire_id"=>$id]);
-        if (empty($evaluation)) {
+            "stage"=>$id]);
+        if (!$evaluation) {
         $evaluation = new Evaluation();
         }
         $form=$this->createForm(EvaluationType::class, $evaluation);
