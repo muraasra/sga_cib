@@ -188,10 +188,12 @@ class StagiaireController extends AbstractController
     #[Route('/stagiaire/stage/{id}', name: 'app_stagiaire.stage')]
     public function stagiaireStage($id, Request $request,EntityManagerInterface $manager, ManagerRegistry $doctrine): Response{
         $stage=$manager->getRepository(Stage::class)->find($id);
+        $stage->getStagiaire();
         $form=$this->createForm(StageType::class, $stage);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
+            
             $entityManager=$doctrine->getManager();
             $entityManager->persist($stage);
             $entityManager->flush();
@@ -203,6 +205,7 @@ class StagiaireController extends AbstractController
         return $this->render("stagiaire/stage.html.twig",[
             'active_page' => 'stage',
             'form'=>$form->createView(),
+            'stagiaire'=>$stage->getStagiaire(),
         ]);
     } 
     #[Route('/stagiaire/evaluation/{id}', name: 'app_stagiaire.evaluation')]

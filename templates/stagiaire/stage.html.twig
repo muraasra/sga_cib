@@ -3,8 +3,30 @@
 {% block title %}Stage!{% endblock %}
 
 {% block body %}
-
+<div class="container">
 <h1>Modifier le stage</h1>
-{{ form(form) }}
+{{ form_start(form) }}
+
+<div class="row">
+<div class="col-lg-6 col-md-6 col-sm-12">
+{{ form_row(form.date_debut) }}
+</div>
+<div class="col-lg-6 col-md-6 col-sm-12">
+{{ form_row(form.date_fin) }}
+</div>
+</div>
+
+<div class="row">
+<div class="col-lg-8 col-md-9 col-sm-12">
+{{ form_row(form.theme) }}
+</div>
+<div class="col-lg-4 col-md-3 col-sm-12">
+<label for="">Stagiaire</label>
+<input type="text" value="{{ stagiaire.nom  }}" readonly=true>
+
+</div>
+</div>
+{{ form_rest(form) }}
+</div>
 
 {% endblock %}
