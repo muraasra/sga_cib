@@ -170,7 +170,7 @@ class EvaluationType extends AbstractType
                 'expanded' => true
 
             ])
-            ->add('stage',)
+            //->add('stage',)
         ->add('Enregistrer', SubmitType::class);
             ;
     }
