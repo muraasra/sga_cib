@@ -6,6 +6,7 @@ use App\Entity\Evaluation;
 use PhpParser\Node\Stmt\Label;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -169,21 +170,9 @@ class EvaluationType extends AbstractType
                 'expanded' => true
 
             ])
-            ->add('stage', ChoiceType::class,[
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
-                'multiple' => false, 
-                'expanded' => true
-
-            ])
-        ;
+            ->add('stage',)
+        ->add('Enregistrer', SubmitType::class);
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
