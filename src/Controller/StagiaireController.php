@@ -8,6 +8,7 @@ use App\Entity\Stagiaire;
 use App\Entity\User;
 use App\Form\EvaluationType;
 use App\Form\HistoriqueType;
+use App\Form\RechercheStagiaireType;
 use App\Form\StageType;
 use App\Form\StagiaireSecType;
 use App\Form\StagiaireType;
@@ -187,12 +188,17 @@ class StagiaireController extends AbstractController
         ]);
     } 
     #[Route('/stagiaire/historique/list', name: 'app_stagiaire.historiqueList')]
-    public function historiqueList( ManagerRegistry $doctrine): Response{
-
-        $stagiaire=$doctrine->getRepository(Stagiaire::class)->findAll();
+    public function historiqueList( ManagerRegistry $doctrine,Request $request,StagiaireRepository $stagiaireRepository): Response{
+        
+        $form = $this->createForm(RechercheStagiaireType::class);
+        $form->handleRequest($request);
+        $data=[];
+        $data=$form->getData();
+        
         return $this->render("stagiaire/stagiaire.html.twig",[
             'active_page' => 'stagiaire',
-            'stagiaires' => $stagiaire,
+            'stagiaires' => $stagiaireRepository->findByData($data),
+            'form'=>$form->createView(),
         ]);
     } 
     #[Route('/stagiaire/stage/{id}', name: 'app_stagiaire.stage')]

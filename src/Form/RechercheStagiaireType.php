@@ -33,6 +33,11 @@ class RechercheStagiaireType extends AbstractType
             'required' => false,
             'attr' => ['placeholder' => 'Theme...']
         ])
+        ->add('encadreur',TextType::class,[
+            'label' => 'Encadreur',
+            'required' => false,
+            'attr' => ['placeholder' => 'encadreur...']
+        ])
         ->add('Rechercher',SubmitType::class)
 
         ;
