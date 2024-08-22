@@ -45,4 +45,13 @@ class EvaluationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function findByStageId($stageId): ?Evaluation
+{
+    return $this->createQueryBuilder('e')
+        ->andWhere('e.stage = :val')
+        ->setParameter('val', $stageId)
+        ->getQuery()
+        ->getOneOrNullResult()
+    ;
+}
 }

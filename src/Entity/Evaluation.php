@@ -183,6 +183,39 @@ class Evaluation
 
         return $this;
     }
+    public function calculerNoteSur20(): float
+   {
+       $correspondance = [
+           'excellent' => 19,
+           'tres_bien' => 17,
+           'bien' => 15,
+           'assez_bien' => 13,
+           'passable' => 11,
+           'insuffisant' => 7,
+       ];
+
+       $somme = 0;
+       $nombreDeChamps = 10; // nombre total de critères
+
+       $somme += $correspondance[$this->assuiduite] ?? 0;
+       $somme += $correspondance[$this->ponctualite] ?? 0;
+       $somme += $correspondance[$this->disponibilite] ?? 0;
+       $somme += $correspondance[$this->interet] ?? 0;
+       $somme += $correspondance[$this->respect] ?? 0;
+       $somme += $correspondance[$this->esprit] ?? 0;
+       $somme += $correspondance[$this->aptitude] ?? 0;
+       $somme += $correspondance[$this->organisation] ?? 0;
+       $somme += $correspondance[$this->application] ?? 0;
+       $somme += $correspondance[$this->recherche] ?? 0;
+
+       // Calcul de la note sur 20
+       $noteSur20 = $somme / $nombreDeChamps;
+
+       return $noteSur20;
+   }
     
-    
+    // public function __toString()
+    // {
+    //     return (string) $this->calculerNoteSur20();
+    // }
 }

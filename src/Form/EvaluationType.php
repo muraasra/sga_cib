@@ -29,7 +29,8 @@ class EvaluationType extends AbstractType
                     'Insuffisant'=>'insuffisant',
                 ],
                 'multiple' => false, 
-                'expanded' => true
+                'expanded' => true,
+                'data_class' => null,
 
             ])
             ->add('ponctualite', ChoiceType::class,[
@@ -44,7 +45,8 @@ class EvaluationType extends AbstractType
                     'Insuffisant'=>'insuffisant',
                 ],
                 'multiple' => false, 
-                'expanded' => true
+                'expanded' => true,
+                'data_class' => null,
 
             ])
             ->add('disponibilite', ChoiceType::class,[
@@ -59,7 +61,8 @@ class EvaluationType extends AbstractType
                     'Insuffisant'=>'insuffisant',
                 ],
                 'multiple' => false, 
-                'expanded' => true
+                'expanded' => true,
+                'data_class' => null,
 
             ])
             ->add('interet', ChoiceType::class,[
@@ -74,7 +77,8 @@ class EvaluationType extends AbstractType
                     'Insuffisant'=>'insuffisant',
                 ],
                 'multiple' => false, 
-                'expanded' => true
+                'expanded' => true,
+                'data_class' => null,
 
             ])
             ->add('respect', ChoiceType::class,[
@@ -90,7 +94,8 @@ class EvaluationType extends AbstractType
                     'Insuffisant'=>'insuffisant',
                 ],
                 'multiple' => false, 
-                'expanded' => true
+                'expanded' => true,
+                'data_class' => null,
 
             ])
             ->add('esprit', ChoiceType::class,[
@@ -105,7 +110,8 @@ class EvaluationType extends AbstractType
                     'Insuffisant'=>'insuffisant',
                 ],
                 'multiple' => false, 
-                'expanded' => true
+                'expanded' => true,
+                'data_class' => null,
 
             ])
             ->add('aptitude', ChoiceType::class,[
@@ -121,7 +127,8 @@ class EvaluationType extends AbstractType
                     'Insuffisant'=>'insuffisant',
                 ],
                 'multiple' => false, 
-                'expanded' => true
+                'expanded' => true,
+                'data_class' => null,
 
             ])
             ->add('organisation', ChoiceType::class,[
@@ -136,7 +143,8 @@ class EvaluationType extends AbstractType
                     'Insuffisant'=>'insuffisant',
                 ],
                 'multiple' => false, 
-                'expanded' => true
+                'expanded' => true,
+                'data_class' => null,
 
             ])
             ->add('application', ChoiceType::class,[
@@ -152,7 +160,8 @@ class EvaluationType extends AbstractType
                     'Insuffisant'=>'insuffisant',
                 ],
                 'multiple' => false, 
-                'expanded' => true
+                'expanded' => true,
+                'data_class' => null,
 
             ])
             ->add('recherche', ChoiceType::class,[
@@ -167,7 +176,8 @@ class EvaluationType extends AbstractType
                     'Insuffisant'=>'insuffisant',
                 ],
                 'multiple' => false, 
-                'expanded' => true
+                'expanded' => true,
+                'data_class' => null,
 
             ])
             //->add('stage',)

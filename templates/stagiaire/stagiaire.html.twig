@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="container">   
- <h1>Liste de vos Stagiaires!</h1>
+ <h1>Liste des Stagiaires du CENADI!</h1>
 
     <table class="table table-striped">
         <thead>
@@ -14,7 +14,10 @@
 				<th>Niveau</th>
 				<th>Action</th>
 		</thead>
-        {% for stagiaire in app.user.stagiaires %}
+        {% for stagiaire in stagiaires %}
+        {% if stagiaire.isAccept == 1 %}
+            
+       
         <tr>
             <td>{{stagiaire.nom|capitalize}}</td>
             <td>{{stagiaire.prenom|capitalize}}</td>
@@ -22,13 +25,13 @@
             <td>{{stagiaire.classe|capitalize}}</td>
             <td>
             {% for stage in stagiaire.stages %}
-            <a href="{{path("app_stagiaire.evaluation", {id:stage.id})}}">Evaluer</a>
-            <a href="{{path("app_stagiaire.stage", {id:stage.id})}}">Modifier</a>
+            <a href="{{path("app_stagiaire.evaluation", {id:stage.id})}}">Rapport</a>
+            <a href="{{path("app_stagiaire.stage", {id:stage.id})}}">fiche</a>
              {% endfor %}
             </td>
         </tr>
         
-            
+          {% endif %}   
         {% endfor %}
 
     

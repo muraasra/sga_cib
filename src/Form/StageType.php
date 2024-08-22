@@ -25,7 +25,7 @@ class StageType extends AbstractType
             ])
             ->add('theme')
             //->add('stagiaire')
-            ->add('evaluation')
+            //->add('evaluation')
             ->add('enregistrer', SubmitType::class)
         ;
     }

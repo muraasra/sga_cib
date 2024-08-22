@@ -12,6 +12,7 @@ use App\Form\StageType;
 use App\Form\StagiaireSecType;
 use App\Form\StagiaireType;
 use App\Form\TuteurFormType;
+use App\Repository\EvaluationRepository;
 use App\Repository\StagiaireRepository;
 use App\Service\Helpers;
 use App\Service\UploadsFile;
@@ -185,12 +186,23 @@ class StagiaireController extends AbstractController
             'active_page' => 'stagiaire',
         ]);
     } 
+    #[Route('/stagiaire/historique/list', name: 'app_stagiaire.historiqueList')]
+    public function historiqueList( ManagerRegistry $doctrine): Response{
+
+        $stagiaire=$doctrine->getRepository(Stagiaire::class)->findAll();
+        return $this->render("stagiaire/stagiaire.html.twig",[
+            'active_page' => 'stagiaire',
+            'stagiaires' => $stagiaire,
+        ]);
+    } 
     #[Route('/stagiaire/stage/{id}', name: 'app_stagiaire.stage')]
-    public function stagiaireStage($id, Request $request,EntityManagerInterface $manager, ManagerRegistry $doctrine): Response{
+    public function stagiaireStage($id, Request $request,EntityManagerInterface $manager, ManagerRegistry $doctrine,EvaluationRepository $evaluationRepository): Response{
         $stage=$manager->getRepository(Stage::class)->find($id);
         $stage->getStagiaire();
         $form=$this->createForm(StageType::class, $stage);
         $form->handleRequest($request);
+        $evaluation = $evaluationRepository->findByStageId($id);
+
         if($form->isSubmitted() && $form->isValid())
         {
             
@@ -206,26 +218,27 @@ class StagiaireController extends AbstractController
             'active_page' => 'stage',
             'form'=>$form->createView(),
             'stagiaire'=>$stage->getStagiaire(),
+            'note'=>$evaluation->calculerNoteSur20(),
         ]);
     } 
     #[Route('/stagiaire/evaluation/{id}', name: 'app_stagiaire.evaluation')]
-    public function EvaluationStagiaire($id,Request $request,ManagerRegistry $doctrine, EntityManagerInterface $manager): Response{
-        $evaluation = $manager->getRepository(Evaluation::class)->findBy([
-            "stage"=>$id]);
+    public function EvaluationStagiaire($id,Request $request,ManagerRegistry $doctrine, EvaluationRepository $evaluationRepository): Response{
+        $evaluation = $evaluationRepository->findByStageId($id);
+        dd($evaluation->calculerNoteSur20());
         if (!$evaluation) {
         $evaluation = new Evaluation();
         }
         $form=$this->createForm(EvaluationType::class, $evaluation);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $stage=$manager->getRepository(Stage::class)->find($id);
-            $stage->setTheme($form->get("theme")->getData());
+            $stage=$doctrine->getRepository(Stage::class)->find($id);
+    
             $evaluation->setStage($stage); // on met l'id du stagiaire en cours en evaluation
             $entityManager=$doctrine->getManager();
             $entityManager->persist($evaluation);
             $entityManager->flush();
             $this->addFlash('success',"Evaluation enregistrée");
-            return $this->redirectToRoute('app_stagiaire.evaluation');
+            return $this->redirectToRoute('app_stagiaire.encadreurList');
         }
         return $this->render("stagiaire/evaluation.html.twig",[
             'active_page' => 'stagiaire',
