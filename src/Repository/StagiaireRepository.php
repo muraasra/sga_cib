@@ -76,7 +76,6 @@ public function findByData($data): array
       }
     if (!empty($data['encadreur'])){
         $qb->andWhere('en.nom LIKE :encadreur')
-        ->andWhere('en.prenom LIKE :encadreur')
               ->setParameter('encadreur', '%'.$data['encadreur'].'%');
       }
     if(!empty($data['dateDebut'])){
