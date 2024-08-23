@@ -56,18 +56,13 @@ public function findByData($data): array
       $qb->andWhere('s.nom LIKE :nom')
             ->setParameter('nom', '%'.$data['nom'].'%');
     }
-
-    if (!empty($data['expediteur'])){
-      $qb->andWhere('s.expediteur LIKE :expediteur')
-            ->setParameter('expediteur', '%'.$data['expediteur'].'%');
-    }
     
     if (!empty($data['filiere'])){
       $qb->andWhere('s.filiere LIKE :filiere')
             ->setParameter('filiere', '%'.$data['filiere'].'%');
     }
     if (!empty($data['niveau'])){
-        $qb->andWhere('s.niveau LIKE :niveau')
+        $qb->andWhere('s.classe LIKE :niveau')
               ->setParameter('niveau', '%'.$data['niveau'].'%');
       }
     if (!empty($data['theme'])){

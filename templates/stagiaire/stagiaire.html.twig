@@ -5,7 +5,20 @@
 {% block body %}
 <div class="container">   
  <h1>Liste des Stagiaires du CENADI!</h1>
-     {{ form(form) }}
+ <div class="row">
+ {{ form_start(form) }}
+     <div class="row">
+        <div class="col-2">{{ form_row(form.nom) }}</div>
+        <div class="col-2">{{ form_row(form.filiere) }}</div>
+        <div class="col-2">{{ form_row(form.niveau) }}</div>
+        <div class="col-2">{{ form_row(form.theme) }}</div>
+        <div class="col-2">{{ form_row(form.encadreur) }}</div>
+        <div class="col-2">
+        <label for=""> </label>
+        {{ form_rest(form) }}</div>
+        
+     </div>
+     </div>
     <table class="table table-striped">
         <thead>
 				<th>Nom</th>
@@ -33,15 +46,6 @@
         
           {% endif %}   
         {% endfor %}
-
-    
-    
-    
-    
-   
-
-
-
     </table>
 
 </div>

@@ -230,7 +230,7 @@ class StagiaireController extends AbstractController
     #[Route('/stagiaire/evaluation/{id}', name: 'app_stagiaire.evaluation')]
     public function EvaluationStagiaire($id,Request $request,ManagerRegistry $doctrine, EvaluationRepository $evaluationRepository): Response{
         $evaluation = $evaluationRepository->findByStageId($id);
-        dd($evaluation->calculerNoteSur20());
+        // dd($evaluation->calculerNoteSur20());
         if (!$evaluation) {
         $evaluation = new Evaluation();
         }
@@ -248,7 +248,34 @@ class StagiaireController extends AbstractController
         }
         return $this->render("stagiaire/evaluation.html.twig",[
             'active_page' => 'stagiaire',
+            'evaluation' => $evaluation,
            'form' => $form->createView(),
+        ]);
+    }
+    #[Route("/stagiaire/evaluation/fiche/{id}", name:"app_stagiaire.evaluationFiche")]
+    public function evaluationFiche($id, ManagerRegistry $doctrine): Response
+    {   $evaluation= $doctrine->getRepository(Evaluation::class)->find($id);
+        // Les éléments de suivi et leurs mentions
+        $elementsSuivi = [
+            'assiduite' => $evaluation->getAssuiduite(),
+            'ponctualite' => $evaluation->getPonctualite(),
+            'disponibilite' => $evaluation->getDisponibilite(),
+            'interet' => $evaluation->getInteret(),
+            'respect' => $evaluation->getRespect(),
+            'esprit' => $evaluation->getEsprit(),
+            'aptitude' => $evaluation->getAptitude(),
+            'organisation' => $evaluation->getOrganisation(),
+            'application' => $evaluation->getApplication(),
+            'recherche' => $evaluation->getRecherche(),
+        ];
+
+        // Les mentions possibles
+        $mentions = ['excellent', 'tres_bien', 'bien', 'assez_bien', 'passable', 'insuffisant'];
+
+        return $this->render('stagiaire/evaluationFiche.html.twig', [
+            'elementsSuivi' => $elementsSuivi,
+            'mentions' => $mentions,
+            'active_page'=>'evaluationFiche'
         ]);
     }
    

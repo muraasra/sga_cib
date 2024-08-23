@@ -3,7 +3,7 @@
 {% block title %}Hello Stagiaire!{% endblock %}
 
 {% block body %}
-<div class="container"> <h1>Evaluation du stagiaire ****</h1>
+{#<div class="container"> <h1>Evaluation du stagiaire ****</h1>
 {{ form_start(form,{'attr':[
         'class:horizontal'
     ]}) }}
@@ -45,5 +45,89 @@
 
 
     {{ form_rest(form) }}
-</div>
+</div> #}
+
+    <h2>Nouvelle évaluation pour {{ evaluation.stage.stagiaire.nom }}</h2>
+
+    {{ form_start(form) }}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Critère</th>
+                    <th>Excellent</th>
+                    <th>Très bien</th>
+                    <th>Bien</th>
+                    <th>Assez bien</th>
+                    <th>Passable</th>
+                    <th>Insuffisant</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Assiduité</td>
+                    {% for choice in form.assuiduite %}
+                        <td>{{ form_widget(choice) }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Ponctualité</td>
+                    {% for choice in form.ponctualite %}
+                        <td>{{ form_widget(choice) }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>disponibilite en classe</td>
+                    {% for choice in form.disponibilite %}
+                        <td>{{ form_widget(choice) }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>interet</td>
+                    {% for choice in form.interet %}
+                        <td>{{ form_widget(choice) }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>respect</td>
+                    {% for choice in form.respect %}
+                        <td>{{ form_widget(choice) }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>esprit</td>
+                    {% for choice in form.esprit %}
+                        <td>{{ form_widget(choice) }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>aptitude</td>
+                    {% for choice in form.aptitude %}
+                        <td>{{ form_widget(choice) }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>organisation</td>
+                    {% for choice in form.organisation %}
+                        <td>{{ form_widget(choice) }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>application</td>
+                    {% for choice in form.application %}
+                        <td>{{ form_widget(choice) }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>recherche</td>
+                    {% for choice in form.recherche %}
+                        <td>{{ form_widget(choice) }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+             
+            
+        </table>
+        <button class="btn btn-primary">Enregistrer</button>
+    {{ form_end(form) }}
+
 {% endblock %}

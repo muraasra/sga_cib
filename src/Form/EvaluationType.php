@@ -15,19 +15,20 @@ class EvaluationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $choices =[
+
+                    'E'=>'excellent',
+                    'TB'=>'tres_bien',
+                    'B'=>'bien',
+                    'AB'=>'assez_bien',
+                    'P'=>'passable',
+                    'I'=>'insuffisant',
+        ];
         $builder
             
             ->add('assuiduite', ChoiceType::class,[
                 'label'=>'Assuiduite',
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
+                'choices' =>$choices,
                 'multiple' => false, 
                 'expanded' => true,
                 'data_class' => null,
@@ -35,15 +36,7 @@ class EvaluationType extends AbstractType
             ])
             ->add('ponctualite', ChoiceType::class,[
                 'label'=>'Ponctualite',
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
+                'choices' =>$choices,
                 'multiple' => false, 
                 'expanded' => true,
                 'data_class' => null,
@@ -51,15 +44,7 @@ class EvaluationType extends AbstractType
             ])
             ->add('disponibilite', ChoiceType::class,[
                 'label' => 'Disponibilite, propreté et respect des règles de securité',
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
+                'choices' =>$choices,
                 'multiple' => false, 
                 'expanded' => true,
                 'data_class' => null,
@@ -67,15 +52,7 @@ class EvaluationType extends AbstractType
             ])
             ->add('interet', ChoiceType::class,[
                 'label'=>'Intéret pour l\'entreprise',
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
+                'choices' =>$choices,
                 'multiple' => false, 
                 'expanded' => true,
                 'data_class' => null,
@@ -84,15 +61,7 @@ class EvaluationType extends AbstractType
             ->add('respect', ChoiceType::class,[
                 'label'=>'Respect de la hiérachie',
                 
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
+                'choices' =>$choices,
                 'multiple' => false, 
                 'expanded' => true,
                 'data_class' => null,
@@ -100,15 +69,7 @@ class EvaluationType extends AbstractType
             ])
             ->add('esprit', ChoiceType::class,[
                 'label'=>'Esprit d\'équipe et initiatives',
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
+                'choices' =>$choices,
                 'multiple' => false, 
                 'expanded' => true,
                 'data_class' => null,
@@ -117,15 +78,7 @@ class EvaluationType extends AbstractType
             ->add('aptitude', ChoiceType::class,[
                 'label'=>'Aptitude à l\'execution des taches',
                 
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
+                'choices' =>$choices,
                 'multiple' => false, 
                 'expanded' => true,
                 'data_class' => null,
@@ -133,15 +86,7 @@ class EvaluationType extends AbstractType
             ])
             ->add('organisation', ChoiceType::class,[
                 'label'=>'Organisation de son poste de travail',
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
+                'choices' =>$choices,
                 'multiple' => false, 
                 'expanded' => true,
                 'data_class' => null,
@@ -150,15 +95,7 @@ class EvaluationType extends AbstractType
             ->add('application', ChoiceType::class,[
                 'label'=>'Application et soin à l\'execution des taches',
                 
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
+                'choices' =>$choices,
                 'multiple' => false, 
                 'expanded' => true,
                 'data_class' => null,
@@ -166,15 +103,7 @@ class EvaluationType extends AbstractType
             ])
             ->add('recherche', ChoiceType::class,[
                 'label'=>'Recherche et progresion dans le theme(rendement)',
-                'choices' =>[
-
-                    'Excellent'=>'excellent',
-                    'Tres bien'=>'tres_bien',
-                    'Bien'=>'bien',
-                    'Assez-bien'=>'assez_bien',
-                    'Passable'=>'passable',
-                    'Insuffisant'=>'insuffisant',
-                ],
+                'choices' =>$choices,
                 'multiple' => false, 
                 'expanded' => true,
                 'data_class' => null,

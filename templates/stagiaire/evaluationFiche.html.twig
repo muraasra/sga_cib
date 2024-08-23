@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Fiche d'évaluation</h1>
+    <div class="evaluation">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Élément de Suivi</th>
+                {% for mention in mentions %}
+                    <th>{{ mention|capitalize }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for element, mention in elementsSuivi %}
+                <tr>
+                    <td>{{ element|capitalize }}</td>
+                    {% for m in mentions %}
+                        <td style="text-align: center;">
+                            {% if mention == m %}
+                               &#10004;{# &#x2611;  Checkbox checked #}
+                            {% else %}
+                                &#x2610; {# Checkbox unchecked #}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}
