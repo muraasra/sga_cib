@@ -1,33 +1,88 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Fiche d'évaluation</h1>
+    <table class="table container-fluid">
+        <tr>
+            <td class="col-6 text-center"> 
+                <i>REPUBLIQUE DU CAMEROUN</i><br>
+                <i>Paix-Travail-Patrie</i><br>
+                <i>------</i><br>
+                <i>MINISTERE DE L'ENSEIGNEMENT SECONDAIRE</i><br>
+                <i>------</i><br>
+                <i>Inspection de pedagogie chargée de l'enseignement de l'informatique</i><br>
+                <i>------</i><br>
+                
+            </td>
+            <td class="col-6 text-center">
+            
+                <i>REPUBLIC OF CAMEROON</i><br>
+                <i>Peace-Work-Fatherland</i><br>
+                <i>------</i><br>
+                <i>MINISTRY ON SECONDARY EDUCATION</i><br>
+                <i>------</i><br>
+                <i>Inspectorate of Pedagory in charge of Computer Science</i><br>
+                <i>------</i><br>
+            </td>
+        </tr>
+    </table>
+
+
+
+    <h1 class="text-center"><u>Fiche de suivie du stagiaire</u></h1>
+    <div class="container info">
+    <br>
+    <p>{{ "NOMS ET PRENOMS DU CANDIDAT : "|upper}} <strong> {{evaluation.stage.stagiaire.nom|upper}} {{evaluation.stage.stagiaire.prenom|upper}} </strong> </p>
+    <p>{{ "ETABLISSEMENT DU CANDIDAT : "|upper}} <strong> {{evaluation.stage.stagiaire.etablissement|upper}}</strong> </p>
+    <p>{{ "STRUCTURE D\'ACCUIEL DU STAGIAIRE : "|upper}} <strong> {{"CENADI"|upper}}</strong> </p>
+    <p>{{ "ENCADREUR PROFESSIONNEL : "|upper}} <strong> {{app.user.nom|upper}}</strong> </p>
+    <p>{{ "Fonction : "|upper}} <strong> {{app.user.nom|upper}}</strong> {{ "CONTACT : "|upper}} <strong> {{app.user.email|upper}}</strong></p>
+    
+    
+    </div>
+<br>
+<br>
     <div class="evaluation">
+   
     <table border="1">
         <thead>
             <tr>
-                <th>Élément de Suivi</th>
+                <th rowspan="2" class="text-center "  >N°</th>
+                <th rowspan="2" class="text-center "  >CRITERERS</th>
+
+                <th colspan="6" class="text-center ">APPRECIATIONS</th>
+            </tr>
+            
+            <tr>
                 {% for mention in mentions %}
                     <th>{{ mention|capitalize }}</th>
                 {% endfor %}
             </tr>
         </thead>
-        <tbody>
+        <tbody> {% set i = 1 %}
             {% for element, mention in elementsSuivi %}
                 <tr>
+                <td>{{ i }}</td>
                     <td>{{ element|capitalize }}</td>
                     {% for m in mentions %}
                         <td style="text-align: center;">
                             {% if mention == m %}
-                               &#10004;{# &#x2611;  Checkbox checked #}
+                               &#10008;{# &#x2611;  Checkbox checked #}
                             {% else %}
-                                &#x2610; {# Checkbox unchecked #}
+                               {#  &#x2610; Checkbox unchecked #}
                             {% endif %}
                         </td>
                     {% endfor %}
                 </tr>
+                {% set i = i + 1 %}
             {% endfor %}
         </tbody>
     </table>
+    <br>
+    <br>
+    <div class="float-right">
+    <p>A <i>Bafoussam</i> le <i>{{ "now"|date('d-m-Y') }}</p></i>
+    <p><strong>L'Encadreur</strong></p>
+    </div>
+    <br>
     </div>
 {% endblock %}

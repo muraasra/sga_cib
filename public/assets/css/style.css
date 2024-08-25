@@ -117,6 +117,15 @@ nav .sidebar-button i {
   font-size: 35px;
   margin-right: 10px;
 }
+.evaluation table {
+  border-collapse: collapse;
+  
+}
+.evaluation th,.evaluation td {
+  border: 1px solid black;
+  padding: 3px ;
+  text-align: left;
+}
 .home-section nav .search-box {
   position: relative;
   height: 50px;

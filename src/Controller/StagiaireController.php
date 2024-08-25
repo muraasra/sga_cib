@@ -259,23 +259,24 @@ class StagiaireController extends AbstractController
         $elementsSuivi = [
             'assiduite' => $evaluation->getAssuiduite(),
             'ponctualite' => $evaluation->getPonctualite(),
-            'disponibilite' => $evaluation->getDisponibilite(),
-            'interet' => $evaluation->getInteret(),
-            'respect' => $evaluation->getRespect(),
-            'esprit' => $evaluation->getEsprit(),
-            'aptitude' => $evaluation->getAptitude(),
-            'organisation' => $evaluation->getOrganisation(),
-            'application' => $evaluation->getApplication(),
-            'recherche' => $evaluation->getRecherche(),
+            'disponibilite, propreté et respect des règles de sécurité' => $evaluation->getDisponibilite(),
+            'intérêt pour l\'entreprise' => $evaluation->getInteret(),
+            'respect de la hiérachie ' => $evaluation->getRespect(),
+            'esprit d\'equipe et d\'initiative' => $evaluation->getEsprit(),
+            'aptitude à l\'exécution des tâches' => $evaluation->getAptitude(),
+            'organisation de son poste de travail' => $evaluation->getOrganisation(),
+            'application et soin à l\'éxécution des tâches ' => $evaluation->getApplication(),
+            'recherche et progression dans le thème (rendement)' => $evaluation->getRecherche(),
         ];
 
         // Les mentions possibles
-        $mentions = ['excellent', 'tres_bien', 'bien', 'assez_bien', 'passable', 'insuffisant'];
+        $mentions = [  'insuffisant','passable','assez_bien','bien', 'tres_bien','excellent'];
 
         return $this->render('stagiaire/evaluationFiche.html.twig', [
             'elementsSuivi' => $elementsSuivi,
             'mentions' => $mentions,
-            'active_page'=>'evaluationFiche'
+            'evaluation' => $evaluation,
+            'active_page'=>'evaluationFiche',
         ]);
     }
    
