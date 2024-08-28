@@ -29,6 +29,12 @@ class Stage
     #[ORM\OneToOne(mappedBy: 'stage', cascade: ['persist', 'remove'])]
     private ?Evaluation $evaluation = null;
 
+    #[ORM\ManyToOne(inversedBy: 'stages')]
+    private ?TypeStage $type_stage = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $rapport = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -81,7 +87,29 @@ class Stage
 
         return $this;
     }
+    public function getTypeStage(): ?TypeStage
+    {
+        return $this->type_stage;
+    }
 
+    public function setTypeStage(?TypeStage $type_stage): static
+    {
+        $this->type_stage = $type_stage;
+
+        return $this;
+    }
+
+    public function getRapport(): ?string
+    {
+        return $this->rapport;
+    }
+
+    public function setRapport(?string $rapport): static
+    {
+        $this->rapport = $rapport;
+
+        return $this;
+    }
     public function getEvaluation(): ?Evaluation
     {
         return $this->evaluation;
@@ -101,4 +129,6 @@ class Stage
     // public function __toString(){
     //     return (string) $this->theme;
     // }
+
+  
 }

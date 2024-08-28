@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SGA_CIB{% endblock %}
+
+{% block body %} 
+
+<div class="container ">
+    <div class="btn-right ">
+    
+       {% if app.user.stagiaire.filiere == 'TI' %}
+        <a href="{{ path("app_stagiaire.canditatureSec",{id:app.user.stagiaire.id})}}" class="btn btn-dark">Modifier</a>
+        {% else %}
+        <a href="{{ path("app_stagiaire.canditatureSup",{id:app.user.stagiaire.id})}}" class="btn btn-dark">Modifier</a>
+
+       {% endif %}
+
+    </div>
+    
+        <h1>Vos informations personnelles</h1>
+        <ul>
+            <li> Nom & prenom :  <strong> {{app.user.stagiaire.nom |upper}} {{ app.user.stagiaire.prenom|capitalize }} </strong></li>
+            <li> Age :  <strong> {{app.user.stagiaire.dateNais|date}} </strong></li>
+            <li> Filiere :  <strong> {{app.user.stagiaire.filiere|capitalize}} </strong></li>
+            <li> Etablissement :  <strong> {{app.user.stagiaire.etablissement|capitalize}} </strong></li>
+            <li> Niveau :  <strong> {{app.user.stagiaire.classe|capitalize}} </strong></li>
+            <li> Adresse :  <strong> {{app.user.stagiaire.addresse|capitalize}} </strong></li>
+            <li> Numero CNI :  <strong> {{app.user.stagiaire.nCni|upper}} </strong></li>
+            <li> Nationalite :  <strong> {{app.user.stagiaire.nationalite|capitalize}} </strong></li>
+            <li> Email :  <strong> {{app.user.stagiaire.email|lower}} </strong></li>
+            <li> Telephone :  <strong> {{app.user.stagiaire.telephone}} </strong></li>
+            {% for stage in app.user.stagiaire.stages %}
+            <li> Theme :  <strong> {{stage.theme}} </strong>  <a class="" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">Modifier votre theme ? </a></li>
+            <li> Rapport :
+            {% if stage.Rapport is empty %} <a class="" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">Importer votre rapport ? </a>
+        
+            {% else %}<strong> <a href="{{ asset('uploads/rapport/') }}{{stage.Rapport}} "type="application/pdf" >Telecharger</a></strong>
+             <a class="" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">Modifier votre rapport ? </a></li>  
+            {% endif %}
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h2 class="offcanvas-title" id="offcanvasExampleLabel">Modifier ce stage ! </h2>
+            
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+         <div class="offcanvas-body">
+        {{ form(form) }}
+        
+        </div>
+    </div>
+                 
+            
+            {% endfor %}     
+        </ul>
+
+</div>
+
+
+ 
+{% endblock %}

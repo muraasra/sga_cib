@@ -4,13 +4,18 @@
 
 {% block body %}
 <div class="container">
-<h1>Demande de stage</h1>
-<div class="btn btn-primary btn-right">
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
-        <i class="bx bx-pencil"></i>
-        <span class="links_name">Ajouter une cadidature</span>
-    </button>
-</div>
+{% if variable == 'Demande de Stage'  %} <h1>{{variable}}</h1> 
+        <div class="btn btn-primary btn-right">
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+                <i class="bx bx-pencil"></i>
+                <span class="links_name">Ajouter une cadidature</span>
+            </button>
+        </div>
+    {% else %}
+        <h1>{{variable}}</h1> 
+    {% endif %}
+
+
 <div class="offcanvas offcanvas-top bg-light" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
   <div class="offcanvas-header">
     <h3 class="offcanvas-title mr-auto ml-auto" id="offcanvasTopLabel">Ajouter une Candidature</h3>

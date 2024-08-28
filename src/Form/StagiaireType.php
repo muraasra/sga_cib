@@ -2,7 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Stage;
 use App\Entity\Stagiaire;
+use App\Entity\TypeStage;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -113,6 +116,13 @@ class StagiaireType extends AbstractType
                         ]),
                     
                     ],],)
+            ->add('type_stage',ChoiceType::class,[
+                'choices'=>[
+                    'Stage Academique' => 'stage_academique',
+                    'Stage Professinnel' => 'stage_professinnel',
+                    'Stage de Vacance' => 'stage_de_vacance',
+                ],
+            ])
             ->add('date_debut', DateType::class,[
                 'label'=>'Date debut de stage',
                 'widget' => 'single_text',

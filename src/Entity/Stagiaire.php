@@ -75,6 +75,9 @@ class Stagiaire
 
     #[ORM\OneToOne(mappedBy: 'stagiaire', cascade: ['persist', 'remove'])]
     private ?User $user = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $type_stage = null;
     public function __construct()
     {
         $this->is_accept = 0; // par défaut, le stagiaire n'est pas accepté
@@ -356,5 +359,17 @@ class Stagiaire
     }
     public function __toString(){
         return (string) $this->nom;
+    }
+
+    public function getTypeStage(): ?string
+    {
+        return $this->type_stage;
+    }
+
+    public function setTypeStage(?string $type_stage): static
+    {
+        $this->type_stage = $type_stage;
+
+        return $this;
     }
 }

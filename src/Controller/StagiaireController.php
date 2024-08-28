@@ -41,15 +41,21 @@ class StagiaireController extends AbstractController
             'controller_name' => 'StagiaireController',
         ]);
     }
-    #[Route('/stagiaire/candidatureSec', name: 'app_stagiaire.canditatureSec')]
+    #[Route('/stagiaire/candidatureSec/{id?0}', name: 'app_stagiaire.canditatureSec')]
     public function addCandidatureSec(
+            Int $id,
             ManagerRegistry $doctrine,
             Request $request ,
             UploadsFile $uploadsFile,
             StagiaireRepository $stagiaireRepository,
     ): Response
     {
-        $stagiaire = new Stagiaire();
+        $create=false;
+        $stagiaire=$doctrine->getRepository(Stagiaire::class)->find($id);
+        if (!$stagiaire){
+            $stagiaire = new Stagiaire();
+            $create=true;
+        }
         $form=$this->createForm(StagiaireSecType::class, $stagiaire);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
@@ -65,20 +71,34 @@ class StagiaireController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('app_stagiaire.listCandidature');
         }
+        if (!$create) {
+            return $this->render('stagiaire/candidature.html.twig', [
+                'form' => $form->createView(),
+                'active_page' => 'candidature',
+                'variable'=>'Mettre à jour Vos informations',
+            ]);
+        }
         return $this->render('stagiaire/candidature.html.twig', [
             'form' => $form->createView(),
             'active_page' => 'candidature',
+            'variable'=>'Demande de Stage',
         ]);
     }
-    #[Route('/stagiaire/candidatureSup', name: 'app_stagiaire.canditatureSup')]
+    #[Route('/stagiaire/candidatureSup/{id?0}', name: 'app_stagiaire.canditatureSup')]
     public function addCandidatureSup(
+            Int $id,
             ManagerRegistry $doctrine,
             Request $request ,
             UploadsFile $uploadsFile,
             StagiaireRepository $stagiaireRepository,
     ): Response
     {
-        $stagiaire = new Stagiaire();
+        $create = false;
+        $stagiaire=$doctrine->getRepository(Stagiaire::class)->find($id);
+        if (!$stagiaire){
+            $stagiaire = new Stagiaire();
+            $create=true;
+        }
         $form=$this->createForm(StagiaireType::class, $stagiaire);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
@@ -94,9 +114,17 @@ class StagiaireController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('app_stagiaire.listCandidature');
         }
+        if (!$create) {
+            return $this->render('stagiaire/candidature.html.twig', [
+                'form' => $form->createView(),
+                'active_page' => 'candidature',
+                'variable'=>'Mettre à jour Vos informations',
+            ]);
+        }
         return $this->render('stagiaire/candidature.html.twig', [
             'form' => $form->createView(),
             'active_page' => 'candidature',
+            'variable'=>'Demande de Stage',
         ]);
     }
     #[Route('/stagiaire/candidature/list', name: 'app_stagiaire.listCandidature')]
@@ -104,6 +132,15 @@ class StagiaireController extends AbstractController
     {
         $repository=$doctrine->getRepository(Stagiaire::class)->findBy(['is_accept'=>0]);
         return $this->render('stagiaire/list.html.twig', [
+            'stagiaires' => $repository,
+            'active_page' => 'list',
+        ]);
+    }
+    #[Route('/stagiaire/list/candidature/refuser', name: 'app_stagiaire.listCandidatureRefuser')]
+    public function listCandidatureRefuser(ManagerRegistry $doctrine): Response
+    {
+        $repository=$doctrine->getRepository(Stagiaire::class)->findBy(['is_accept'=>-1]);
+        return $this->render('stagiaire/listRefuser.html.twig', [
             'stagiaires' => $repository,
             'active_page' => 'list',
         ]);
@@ -279,6 +316,34 @@ class StagiaireController extends AbstractController
             'active_page'=>'evaluationFiche',
         ]);
     }
+    #[Route('/stagiaire/info', name: 'app_stagiaire.stageInfo')]
+    public function stageInfo( request $request, ManagerRegistry $doctrine, UploadsFile $uploadsFile): Response{
+        foreach ($this->getUser()->getStagiaire()->getStages() as $stage)
+        {
+        $stage= $doctrine->getRepository(Stage::class)->find($stage->getId());
+
+        }
+        $form=$this->createForm(StageType::class, $stage);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            if(!empty($form->get('rapport')->getData())){
+                $brochureFile1=$form->get('rapport')->getData();
+            $directory=$this->getParameter("rapport_directory");
+            $stage->setRapport($uploadsFile->uploadsFile($brochureFile1,$directory,$stage->getTheme()));
+            }
+            
+            $entityManager=$doctrine->getManager();
+            $entityManager->persist($stage);
+            $entityManager->flush();
+
+        }
+        
+        return $this->render("stagiaire/stagiaireInfo.html.twig",[
+            'active_page' => 'stagiaire',
+            'form' => $form->createView(),
+            
+        ]);
+    } 
    
 
 }

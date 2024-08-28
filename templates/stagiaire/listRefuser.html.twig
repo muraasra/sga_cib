@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SGA_CIB
+{% endblock %}
+
+{% block body %}
+    <h1>SGA_CIB!</h1>
+
+
+    <table class="table table-striped">
+        <thead>
+				<th>Nom</th>
+				<th>Filiere</th>
+				<th>Etablissement</th>
+				<th>Niveau</th>
+		</thead>
+
+        {% for stagiaire in stagiaires %}
+       <tr>
+        <td>{{ stagiaire.nom|capitalize}}</td> 
+        <td>{{ stagiaire.filiere|capitalize}} </td>
+        <td>{{ stagiaire.etablissement|capitalize}} </td>
+        <td>{{ stagiaire.classe|capitalize}} </td>
+        <td>
+		     <a class="btn btn-primary" href="{{ path("app_stagiaire.detailCandidature", {id:stagiaire.id}) }}"> 
+				detail
+			</a>
+            <a class="btn btn-primary" href="{{ path("app_stagiaire.deleteCandidature", {id:stagiaire.id}) }}">
+				supprimer
+			</a>
+		</td>
+        </tr> 
+
+        {% endfor %}
+    
+    
+    </table>
+{% endblock %}
