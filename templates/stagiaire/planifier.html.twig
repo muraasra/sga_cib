@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Planifier
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<h1>Planifier des tâches pour
+			{{ stagiaire.nom }}
+			{{ stagiaire.prenom }}</h1>
+
+		{{ form_start(form) }}
+		<div class="row">
+			<div class="col-12">{{ form_row(form.description) }}</div>
+
+		</div>
+        <div class="row">
+			<div class="col-lg-3 col-md-6">   {{ form_row(form.niveau) }}</div>
+            <div class="col-lg-3 col-md-6">	{{ form_row(form.date_debut) }}</div>
+            <div class="col-lg-3 col-md-6">   {{ form_row(form.date_fin) }}</div>
+            <div class="col-lg-3 col-md-6">	{{ form_row(form.statut) }}</div>
+		</div>
+        <div class="row">
+			
+			<div class="col">   {{ form_row(form.commentaire) }}</div>
+
+		</div>
+
+		<button type="submit">Planifier la tâche</button>
+		{{ form_end(form) }}
+
+		{% if app.session.flashBag.has('success') %}
+			<div class="alert alert-success">
+				{{ app.session.flashBag.get('success')[0] }}
+			</div>
+		{% endif %}
+
+		<a href="{{ path('app_stagiaire.timeline', {id: stagiaire.id}) }}">Voir toutes les tâches planifiées</a>
+	</div>
+{% endblock %}

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Evaluation;
 use App\Entity\Stage;
 use App\Entity\Stagiaire;
+use App\Entity\Tache;
 use App\Entity\User;
 use App\Form\EvaluationType;
 use App\Form\HistoriqueType;
@@ -12,9 +13,11 @@ use App\Form\RechercheStagiaireType;
 use App\Form\StageType;
 use App\Form\StagiaireSecType;
 use App\Form\StagiaireType;
+use App\Form\TacheType;
 use App\Form\TuteurFormType;
 use App\Repository\EvaluationRepository;
 use App\Repository\StagiaireRepository;
+use App\Repository\TacheRepository;
 use App\Service\Helpers;
 use App\Service\UploadsFile;
 use Doctrine\ORM\EntityManager;
@@ -344,6 +347,54 @@ class StagiaireController extends AbstractController
             
         ]);
     } 
+   
+    #[Route('/stagiaire/planifierTache/{id}/{tacheId?0}', name: 'app_stagiaire.planifierTache')]
+    public function planifierTaches($id, int $tacheId, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $tache=$doctrine->getRepository(Tache::class)->find($tacheId);
+        if (!$tache) {
+            $tache = new Tache(); 
+        }
+        $stagiaire = $doctrine->getRepository(Stagiaire::class)->find($id);
+        $tache->setStagiaire($stagiaire);
+
+        $form = $this->createForm(TacheType::class, $tache);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($tache);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La tâche a été planifiée avec succès.');
+
+            return $this->redirectToRoute('app_stagiaire.planifierTache', ['id' => $stagiaire->getId()]);
+        }
+
+        return $this->render('stagiaire/planifier.html.twig', [
+            'stagiaire' => $stagiaire,
+            'form' => $form->createView(),
+            'active_page' => 'planifierTache',
+        ]);
+    
+    }
+    /**
+     * @Route("/stagiaire/{id}/taches/timeline", name="stagiaire_taches_timeline")
+     */
+    #[Route('/stagiaire/timeline/{id}', name: 'app_stagiaire.timeline')]
+    public function timeline($id, ManagerRegistry $doctrine, TacheRepository $tacheRepository): Response
+    {
+        $stagiaire = $doctrine->getRepository(Stagiaire::class)->find($id);
+        // Récupération des tâches du stagiaire
+        $taches = $tacheRepository->findBy(['stagiaire' => $stagiaire], ['date_debut' => 'ASC']);
+
+        // Rendu de la vue Twig en passant les données nécessaires
+        return $this->render('stagiaire/timeline.html.twig', [
+            'stagiaire' => $stagiaire,
+            'taches' => $taches,
+            'active_page' => 'timeline',
+        ]);
+    }
    
 
 }
