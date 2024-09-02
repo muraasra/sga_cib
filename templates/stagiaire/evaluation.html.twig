@@ -3,6 +3,7 @@
 {% block title %}Hello Stagiaire!{% endblock %}
 
 {% block body %}
+<div class="containter m-4">
 {#<div class="container"> <h1>Evaluation du stagiaire ****</h1>
 {{ form_start(form,{'attr':[
         'class:horizontal'
@@ -50,6 +51,10 @@
     <h2>Nouvelle évaluation pour {{ evaluation.stage.stagiaire.nom }}</h2>
 
     {{ form_start(form) }}
+    <div class="row">
+    <div class="col-6"> {{ form_row(form.date_debut) }}</div>
+    <div class="col-6"> {{ form_row(form.date_fin) }}</div>
+    </div>
         <table class="table">
             <thead>
                 <tr>
@@ -127,7 +132,6 @@
              
             
         </table>
-        <button class="btn btn-primary">Enregistrer</button>
     {{ form_end(form) }}
-
+</div>
 {% endblock %}

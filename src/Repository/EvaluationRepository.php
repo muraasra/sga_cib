@@ -54,4 +54,15 @@ public function findByStageId($stageId): ?Evaluation
         ->getOneOrNullResult()
     ;
 }
+public function findStageByEvaluationId($stageId,$evaluationId): ?Evaluation
+{
+    return $this->createQueryBuilder('e')
+        ->andWhere('e.id = :evaluationId')
+        ->setParameter('evaluationId', $evaluationId)
+        ->andWhere('e.stage = :val')
+        ->setParameter('val', $stageId)
+        ->getQuery()
+        ->getOneOrNullResult()
+    ;
+}
 }

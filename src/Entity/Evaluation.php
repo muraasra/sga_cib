@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EvaluationRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EvaluationRepository::class)]
@@ -13,9 +14,9 @@ class Evaluation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'evaluation', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Stage $stage = null;
+    // #[ORM\OneToOne(inversedBy: 'evaluation', cascade: ['persist', 'remove'])]
+    // #[ORM\JoinColumn(nullable: false)]
+    // private ?Stage $stage = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $assuiduite = null;
@@ -47,22 +48,31 @@ class Evaluation
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $recherche = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_debut = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_fin = null;
+
+    #[ORM\ManyToOne(inversedBy: 'evaluations')]
+    private ?Stage $stage = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStage(): ?Stage
-    {
-        return $this->stage;
-    }
+    // public function getStage(): ?Stage
+    // {
+    //     return $this->stage;
+    // }
 
-    public function setStage(Stage $stage): static
-    {
-        $this->stage = $stage;
+    // public function setStage(Stage $stage): static
+    // {
+    //     $this->stage = $stage;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getAssuiduite(): ?string
     {
@@ -218,4 +228,40 @@ class Evaluation
     // {
     //     return (string) $this->calculerNoteSur20();
     // }
+
+    public function getDateDebut(): ?\DateTimeInterface
+    {
+        return $this->date_debut;
+    }
+
+    public function setDateDebut(?\DateTimeInterface $date_debut): static
+    {
+        $this->date_debut = $date_debut;
+
+        return $this;
+    }
+
+    public function getDateFin(): ?\DateTimeInterface
+    {
+        return $this->date_fin;
+    }
+
+    public function setDateFin(?\DateTimeInterface $date_fin): static
+    {
+        $this->date_fin = $date_fin;
+
+        return $this;
+    }
+
+    public function getStage(): ?Stage
+    {
+        return $this->stage;
+    }
+
+    public function setStage(?Stage $stage): static
+    {
+        $this->stage = $stage;
+
+        return $this;
+    }
 }

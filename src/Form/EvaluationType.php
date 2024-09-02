@@ -6,6 +6,7 @@ use App\Entity\Evaluation;
 use PhpParser\Node\Stmt\Label;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,7 +26,15 @@ class EvaluationType extends AbstractType
                     'I'=>'insuffisant',
         ];
         $builder
-            
+
+        ->add('date_debut', DateType::class, [
+            'widget' => 'single_text',
+            'format' => 'yyyy-MM-dd',
+        ])
+        ->add('date_fin', DateType::class, [
+            'widget' => 'single_text',
+            'format' => 'yyyy-MM-dd',
+        ])
             ->add('assuiduite', ChoiceType::class,[
                 'label'=>'Assuiduite',
                 'choices' =>$choices,

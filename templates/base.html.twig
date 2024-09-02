@@ -125,42 +125,63 @@
                     <span class="links_name">Stock</span>
                 </a>
             </li> #}
+           {% if is_granted('ROLE_ADMIN') %}
             <li class="">
                 <a href="{{ path("app_stagiaire.listCandidature")}}">
                     <i class="bx bx-book-alt"></i>
                     <span class="links_name">Candidatures</span>
                 </a>
             </li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
             <li class="">
                 <a href="{{ path("app_stagiaire.encadreurList")}}">
                     <i class="bx bx-book-alt"></i>
                     <span class="links_name">Mes stagiaires</span>
                 </a>
             </li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
             <li class="">
                 <a href="{{ path("app_stagiaire.historiqueList")}}">
                     <i class="bx bx-book-alt"></i>
                     <span class="links_name">Tout les stagiaires</span>
                 </a>
             </li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
             <li class="">
                 <a href="{{ path("app_stagiaire.listCandidatureRefuser")}}">
                     <i class="bx bx-book-alt"></i>
                     <span class="links_name">Candidatures Rejeter</span>
                 </a>
             </li>
-            <li class="">
-                <a href="#">
-                    <i class="bx bx-book-alt"></i>
-                    <span class="links_name">##</span>
-                </a>
-            </li>
+            {% endif %}
+            {% if is_granted('ROLE_STAGIAIRE') %}
             <li>
                 <a href="{{ path("app_stagiaire.stageInfo")}}">
                     <i class="bx bx-user"></i>
-                    <span class="links_name">Info personnelle</span>
+                    <span class="links_name">Mes Informations </span>
                 </a>
             </li>
+            <li>
+                <a href="{{ path("app_stagiaire.timeline",{id:app.user.stagiaire.id})}}">
+                    <i class="bx bx-user"></i>
+                    <span class="links_name">Mes Tâches </span>
+                </a>
+            </li>
+            
+            {% for stage in app.user.stagiaire.stages %}
+                {% set monStage = stage %}
+            
+            <li>
+                <a href="{{ path("app_stagiaire.evaluationList",{id:monStage.id})}}">
+                    <i class="bx bx-user"></i>
+                    <span class="links_name">Mes evaluations </span>
+                </a>
+            </li>
+            {% endfor %}
+            {% endif %}
             <li>
                 <a href="#">
                     <i class="bx bx-user"></i>

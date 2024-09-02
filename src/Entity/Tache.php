@@ -35,6 +35,9 @@ class Tache
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $commentaire = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_fin_reel = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +123,18 @@ class Tache
     public function setCommentaire(?string $commentaire): static
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getDateFinReel(): ?\DateTimeInterface
+    {
+        return $this->date_fin_reel;
+    }
+
+    public function setDateFinReel(?\DateTimeInterface $date_fin_reel): static
+    {
+        $this->date_fin_reel = $date_fin_reel;
 
         return $this;
     }

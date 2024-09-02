@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+{% block title %}Évaluations de {{ stage.stagiaire.nom }}{% endblock %}
+
+{% block body %}
+
+   <div class="container"> 
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table, th, td { border: 1px solid black; }
+        th, td { padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+
+    <h1>Évaluations de {{ stage.stagiaire.nom }}</h1>
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="btn-right">
+            <a href="{{ path("app_stagiaire.evaluation",{id:stage.id})}}" class="btn btn-primary"> Ajouter une evaluation</a>
+        {% endif %}
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>N° de la semaine</th>
+                <th>Date debut</th>
+                <th>Assiduité</th>
+                <th>Ponctualité</th>
+                <th>Note sur 20</th>
+                <th>Telecharger</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set i = 1 %}
+            {% for evaluation in evaluations %}
+            <tr>
+                <td>{{ i }}</td>
+                <td class="text-center">{% if evaluation.dateDebut is null %} - {% else %} {{ evaluation.dateDebut|date('d/m/Y') }} {% endif %}
+                 </td>
+                <td>{{ evaluation.assuiduite }}</td>
+                <td>{{ evaluation.ponctualite }}</td>
+                <td>{{ evaluation.calculerNoteSur20() }}</td>
+                <td>
+                     <a href="{#{{ path('app_evaluation.telecharger', {id: evaluation.id}) }}#}"> 
+                        Télécharger
+                    </a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    
+                        <a href="{{ path("app_stagiaire.evaluation",{id:stage.id,evaluationId:evaluation.id})}}" class="btn btn-primary"> modifier</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% set i = i + 1 %}
+            {% else %}
+            <tr>
+                <td colspan="5">Aucune évaluation disponible pour ce stagiaire.</td>
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

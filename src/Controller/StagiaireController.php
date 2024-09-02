@@ -247,7 +247,7 @@ class StagiaireController extends AbstractController
         $stage->getStagiaire();
         $form=$this->createForm(StageType::class, $stage);
         $form->handleRequest($request);
-        $evaluation = $evaluationRepository->findByStageId($id);
+        //$evaluation = $evaluationRepository->findByStageId($id);
 
         if($form->isSubmitted() && $form->isValid())
         {
@@ -264,28 +264,31 @@ class StagiaireController extends AbstractController
             'active_page' => 'stage',
             'form'=>$form->createView(),
             'stagiaire'=>$stage->getStagiaire(),
-            'note'=>$evaluation->calculerNoteSur20(),
+            'note'=>00,
+           // 'note'=>$evaluation->calculerNoteSur20(),
         ]);
     } 
-    #[Route('/stagiaire/evaluation/{id}', name: 'app_stagiaire.evaluation')]
-    public function EvaluationStagiaire($id,Request $request,ManagerRegistry $doctrine, EvaluationRepository $evaluationRepository): Response{
-        $evaluation = $evaluationRepository->findByStageId($id);
+    #[Route('/stagiaire/evaluation/{id<\d+>}/{evaluationId?0}', name: 'app_stagiaire.evaluation')]
+    public function EvaluationStagiaire($id,int $evaluationId,Request $request,ManagerRegistry $doctrine, EvaluationRepository $evaluationRepository, EntityManagerInterface $entityManager): Response{
+        $evaluation = $evaluationRepository->findStageByEvaluationId($id,$evaluationId);
         // dd($evaluation->calculerNoteSur20());
         if (!$evaluation) {
         $evaluation = new Evaluation();
         }
         $form=$this->createForm(EvaluationType::class, $evaluation);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $stage=$doctrine->getRepository(Stage::class)->find($id);
-    
-            $evaluation->setStage($stage); // on met l'id du stagiaire en cours en evaluation
+        $stage=$doctrine->getRepository(Stage::class)->find($id);
+        //$stage = $entityManager->getRepository(Stage::class)->find($id);
+        $evaluation->setStage($stage); // on met l'id du stagiaire en cours en evaluation
+            if($form->isSubmitted() && $form->isValid()){
+
             $entityManager=$doctrine->getManager();
             $entityManager->persist($evaluation);
             $entityManager->flush();
             $this->addFlash('success',"Evaluation enregistrée");
             return $this->redirectToRoute('app_stagiaire.encadreurList');
         }
+        
         return $this->render("stagiaire/evaluation.html.twig",[
             'active_page' => 'stagiaire',
             'evaluation' => $evaluation,
@@ -378,21 +381,80 @@ class StagiaireController extends AbstractController
         ]);
     
     }
-    /**
-     * @Route("/stagiaire/{id}/taches/timeline", name="stagiaire_taches_timeline")
-     */
+    
     #[Route('/stagiaire/timeline/{id}', name: 'app_stagiaire.timeline')]
-    public function timeline($id, ManagerRegistry $doctrine, TacheRepository $tacheRepository): Response
+    public function timeline($id, ManagerRegistry $doctrine, TacheRepository $tacheRepository, EntityManagerInterface $entityManager): Response
     {
-        $stagiaire = $doctrine->getRepository(Stagiaire::class)->find($id);
+        $stagiaire = $entityManager->getRepository(Stagiaire::class)->find($id);
         // Récupération des tâches du stagiaire
-        $taches = $tacheRepository->findBy(['stagiaire' => $stagiaire], ['date_debut' => 'ASC']);
+        $taches = $tacheRepository->findBy(['stagiaire' => $stagiaire], ['date_debut' => 'DESC']);
+        $date = new \DateTime;
+        foreach ($taches as $tache){
+            if($tache->getStatut() == "a_faire" and $tache->getDateDebut() < $date){
+                
+                $tache->setStatut("en_cours");
+                $entityManager->flush();
+               
+            }
+        }
+        
+        
 
         // Rendu de la vue Twig en passant les données nécessaires
         return $this->render('stagiaire/timeline.html.twig', [
             'stagiaire' => $stagiaire,
             'taches' => $taches,
+            'date' => $date,
             'active_page' => 'timeline',
+        ]);
+    }
+    #[Route('/stagiaire/tache/changerStatut/{id}', name: 'app_stagiaire.tacheChangerStatut')]
+    public function changerStatut($id, EntityManagerInterface $entityManager): Response
+    {
+        $tache = $entityManager->getRepository(Tache::class)->find($id);
+        // Récupération du nouveau statut envoyé via le formulaire
+        $nouveauStatut = $_POST['nouveau_statut'];
+        if ($nouveauStatut =="termine"){
+            $date = new \DateTime();
+            $tache->setDateFinReel($date);
+
+
+        }
+        // Mise à jour du statut de la tâche
+        $tache->setStatut($nouveauStatut);
+        // Sauvegarde des modifications en base de données
+        $entityManager->flush();
+        
+        // Redirection vers la page de la timeline ou une autre page
+        return $this->redirectToRoute('app_stagiaire.timeline', ['id' => $tache->getStagiaire()->getId()]);
+    }
+   
+    #[Route('/stagiaire/tache/rapport/{id}', name: 'app_stagiaire.tacheRapport')]
+    public function rapport($id, EntityManagerInterface $entityManager, TacheRepository $tacheRepository): Response
+    {
+        $stagiaire = $entityManager->getRepository(Stagiaire::class)->find($id);
+        // Récupération des tâches du stagiaire
+        $taches = $tacheRepository->findBy(['stagiaire' => $stagiaire], ['date_fin' => 'ASC']);
+
+        return $this->render('stagiaire/tacheRapport.html.twig', [
+            'stagiaire' => $stagiaire,
+            'taches' => $taches,
+            'active_page' => 'rapportStagiaire',
+        ]);
+    }
+    
+    #[Route('/stagiaire/evaluation/list/{id<\d+>}', name: 'app_stagiaire.evaluationList')]
+    public function listEvaluationStagiaire($id, EntityManagerInterface $entityManager): Response
+    {
+        $stage=$entityManager->getRepository(Stage::class)->find($id);
+        // Récupérer les évaluations du stagiaire
+        $evaluations = $stage->getEvaluations();
+
+        // Rendre la vue avec les évaluations
+        return $this->render('stagiaire/listEvaluation.html.twig', [
+            'stage' => $stage,
+            'evaluations' => $evaluations,
+            'active_page' => 'evaluationList',
         ]);
     }
    

@@ -5,54 +5,99 @@
 {% endblock %}
 
 {% block body %}
-    <style>
+<div class="container timeli">
+     <style>
         /* Style de base pour le body */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+         .timeli {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
             
         }
 
         /* Container pour la timeline */
         .timeline {
             position: relative;
-            margin: 20px 0;
-            padding: 0;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px 0;
             list-style: none;
         }
 
-       /* Chaque élément de la timeline */
-        .timeline-item {
-            position: relative;
-            width: 45%;
-            padding: 10px 20px;
-            margin-bottom: 20px;
-            background: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Ligne verticale dans la timeline */
-        .timeline-item:before {
+        /* Ligne centrale de la timeline */
+        .timeline:before {
             content: '';
             position: absolute;
-            left: 18px;
             top: 0;
             bottom: 0;
-            width: 4px;
-            background: #2c3e50;
+            left: 50%;
+            width: 6px;
+            background: #3498db;
+            margin-left: -3px;
         }
 
-        /* Icône circulaire pour chaque élément */
-        .timeline-item:after {
+        /* Chaque élément de la timeline */
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 10px 20px;
+            box-sizing: border-box;
+        }
+
+        /* Alternance gauche/droite */
+        .timeline-item-left {
+            left: 0;
+        }
+        .timeline-item-right {
+            left: 50%;
+        }
+
+        /* Contenu des items */
+        .timeline-item-content {
+            position: relative;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Ligne centrale des éléments */
+        .timeline-item-content:before {
             content: '';
             position: absolute;
-            left: 9px;
-            top: 10px;
-            width: 18px;
-            height: 18px;
+            top: 20px;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
-            background: #2c3e50;
+            background: #3498db;
+            z-index: 1;
+        }
+
+        /* Positionnement des éléments */
+        .timeline-item-left .timeline-item-content {
+            margin-right: 0;
+            text-align: right;
+        }
+        .timeline-item-left .timeline-item-content:before {
+            right: -8px;
+        }
+        .timeline-item-right .timeline-item-content {
+            margin-left: 0;
+            text-align: left;
+        }
+        .timeline-item-right .timeline-item-content:before {
+            left: -8px;
+        }
+
+        /* Style des dates et descriptions */
+        .timeline-item-content h2 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #3498db;
+        }
+        .timeline-item-content p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
         }
 
         /* Contenu de chaque élément */
@@ -71,74 +116,101 @@
         .timeline-item-content p {
             margin: 0;
         }
-        /* Alternance gauche/droite */
-        .timeline-item-left {
-            float: left;
-            clear: left;
-            margin-left: 5%;
-        }
-        .timeline-item-right {
-            float: right;
-            clear: right;
-            margin-right: 5%;
-        }
-        /* Ligne verticale dans la timeline */
-        .timeline:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 4px;
-            background: #2c3e50;
-        }
-         /* Icône circulaire pour chaque élément */
-        .timeline-item:after {
-            content: '';
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #2c3e50;
-            top: 15px;
-            z-index: 1;
-        }
+
         /* Statuts de la tâche */
         .status {
             font-weight: bold;
             color: #3498db;
-        }   
-        /* Position des icônes sur la ligne centrale */
-        .timeline-item-left:after {
-            left: -9px;
-        }
-        .timeline-item-right:after {
-            right: -9px;
         }
 
         /* Statuts spécifiques */
         .status-a_faire {
-            color: #e67e22;
+            color: #e67e22 !important;
         }
-        .status-en_cours {
-            color: #f39c12;
+        .status-en_cours, .moyen {
+            color: #f39c12  !important;
         }
-        .status-termine {
-            color: #27ae60;
+        .status-termine, .haut {
+            color: #27ae60 !important;
+        }
+        /* Styles pour le popup */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .popup-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+
+        .popup-content h3 {
+            margin: 0 0 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .popup-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .popup-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-confirm {
+            background-color: #27ae60;
+            color: #fff;
+        }
+
+        .btn-cancel {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+        .alarm{
+            color: #e74c3c;
         }
     </style>
 
 
-<h1>Timeline des Tâches de {{ stagiaire.nom }} {{ stagiaire.prenom }}</h1>
-
+<h1>Timeline des Tâches de {{ stagiaire.nom }} {{ stagiaire.prenom }}</h1>      
+<div class="btn-right">{% if is_granted('ROLE_ADMIN') %}<a href="{{ path("app_stagiaire.planifierTache",{id:stagiaire.id})}}" class="btn btn-primary"> Ajouter une tache</a> <br>{% endif %} 
+<a href="{{ path("app_stagiaire.tacheRapport",{id:stagiaire.id})}}">Telecharger le rapport</a></div> 
 <ul class="timeline">
     {% for tache in taches %}
-    <li class="timeline-item {% if tache.statut == 'termine' %}timeline-item-right{% else %}timeline-item-left{% endif %}">
+    <li class="timeline-item {% if tache.statut == 'termine' and tache.dateDebut < date %}timeline-item-right{% else %}timeline-item-left{% endif %}">
         <div class="timeline-item-content">
-           <a href="{{ path("app_stagiaire.planifierTache",{id:stagiaire.id,tacheId:tache.id})}}"> <h2>  {{ tache.description }} </h2></a>
+        {% if is_granted('ROLE_ADMIN') %}
+             <a href="{{ path("app_stagiaire.planifierTache",{id:stagiaire.id,tacheId:tache.id})}}"><h2>{{ tache.description }}</h2></a>
+        {% else %}
+         <h2>{{ tache.description }}</h2>
+        {% endif %}    
             <p><strong>Date de début:</strong> {{ tache.dateDebut|date('d/m/Y') }}</p>
-            <p><strong>Date de fin:</strong> {{ tache.dateFin|date('d/m/Y') }}</p>
-            <p class="status status-{{ tache.statut|lower }}"><strong>Statut:</strong> 
+            <p><strong>Date de fin prévue:</strong> {{ tache.dateFin|date('d/m/Y') }}</p>
+            
+            {% if tache.dateDebut < date %}
+            <p class="status status-{{tache.statut|lower}}"><strong>Statut:</strong> 
+            
                 {% if tache.statut == 'a_faire' %}
                     À faire
                 {% elseif tache.statut == 'en_cours' %}
@@ -146,12 +218,94 @@
                 {% elseif tache.statut == 'termine' %}
                     Terminé
                 {% endif %}
+                 </p>
+            {% else %}
+            <p class="status status-a_faire "><strong>Statut:</strong> 
+             À faire
             </p>
-            {% if tache.commentaire %}
-            <p class="timeline-item-comment" ><strong>Commentaire:</strong> {{ tache.commentaire }}</p>
             {% endif %}
+            
+            {% if tache.commentaire %}
+            <p><strong>Commentaire:</strong> {{ tache.commentaire }}</p>
+            {% endif %}
+            
+            <!-- Boutons pour changer le statut -->
+            {% if tache.dateDebut > date  %}
+             <div class="btn-popup-left">
+             <i>Commence dans bientôt !</i>
+             </div>
+            {% endif %}
+            
+
+            {% if tache.statut == 'en_cours' and tache.dateDebut < date %}
+            <div class="btn-popup-left">
+            {% if is_granted('ROLE_ADMIN') %}
+             
+             <button onclick="openPopup('Voulez-vous vraiment marquer cette tâche comme terminée ?', '{{ path('app_stagiaire.tacheChangerStatut', {'id': tache.id}) }}', 'termine')" style="background-color: #27ae60 ;"> ✔️ terminé </button>
+              {% elseif date <= tache.dateFin %}{% set interval = date|date_diff(tache.dateFin) %} 
+              <i class={% if interval.d < 3 %} "alarm" {% elseif interval.d < 6 %} "moyen" {% else %} "haut" {% endif %}>
+               <strong >Jours restant : </strong> {{interval.d}}</i>
+              {% else %}
+              <i> <strong class="alarm">Limite dépassée !</strong> </i>
+                
+              </div>
+            
+                
+            {% endif %}
+            {% endif %}
+            {% if tache.statut == 'termine' and tache.dateDebut < date %}
+             <div class="btn-popup-right">
+             {# <button onclick="openPopup('Voulez-vous vraiment remettre cette tâche en cours ?', '{{ path('app_stagiaire.tacheChangerStatut', {'id': tache.id}) }}', 'en_cours')" style="background-color: #f39c12 ;">⏳ Remettre en cours</button> #}
+             <i><strong>Date fin reel : </strong> {{tache.dateFin|date('d/m/Y')}}</i>
+             </div>
+            
+            
+            {% endif %}
+            
         </div>
     </li>
     {% endfor %}
 </ul>
+</div>
+
+<!-- Popup de confirmation -->
+<div id="popup-overlay" class="popup-overlay">
+    <div class="popup-content">
+        <h3 id="popup-message">Êtes-vous sûr ?</h3>
+        <div class="popup-buttons">
+            <button id="popup-confirm" class="btn-confirm">Confirmer</button>
+            <button id="popup-cancel" class="btn-cancel" onclick="closePopup()">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript pour le popup -->
+<script>
+    function openPopup(message, url, status) {
+        document.getElementById('popup-message').innerText = message;
+        document.getElementById('popup-confirm').onclick = function() {
+            submitForm(url, status);
+        };
+        document.getElementById('popup-overlay').style.display = 'block';
+    }
+
+    function closePopup() {
+        document.getElementById('popup-overlay').style.display = 'none';
+    }
+
+    function submitForm(url, status) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = url;
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'nouveau_statut';
+        input.value = status;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
 {% endblock %}
