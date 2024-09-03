@@ -21,7 +21,7 @@ class MailerService
         $content ,
         $subject = 'le sujet',
     ) {
-
+        
  $email = (new Email())
             ->from("tayouprofessionnel@gmail.com")
             ->to($to)
