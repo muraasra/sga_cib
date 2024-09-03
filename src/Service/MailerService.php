@@ -7,29 +7,30 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Email;
 
 class MailerService
 {  
-    public function __construct(private MailerInterface $mailer)
+    public function __construct(private MailerInterface $mailer , private TransportInterface $transport)
     {
     }
 
     public function sendEmail(
-        $to = "wilfriedtayou6@gmail.com",
-        $content = 'le fichier html',
+        $to,
+        $content ,
         $subject = 'le sujet',
     ) {
 
  $email = (new Email())
-            ->from("contact.tayoufom@protonmail.com")
+            ->from("tayouprofessionnel@gmail.com")
             ->to($to)
             ->subject($subject)
             ->text('le text')
             ->html($content);
             
             try {
-                $this->mailer->send($email);
+                $this->transport->send($email);
                 return true;
             } catch (TransportExceptionInterface $e) {
                 // some error prevented the email sending; display an
