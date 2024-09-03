@@ -28,7 +28,7 @@ class MailerService
             ->subject($subject)
             ->text('le text')
             ->html($content);
-          
+           
             try {
                 $this->transport->send($email);
                 return true;
