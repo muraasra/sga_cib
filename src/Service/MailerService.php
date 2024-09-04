@@ -21,7 +21,7 @@ class MailerService
         $content ,
         $subject = 'le sujet',
     ) {
-        
+
  $email = (new Email())
             ->from("tayouprofessionnel@gmail.com")
             ->to($to)
@@ -33,9 +33,7 @@ class MailerService
                 $this->transport->send($email);
                 return true;
             } catch (TransportExceptionInterface $e) {
-                // some error prevented the email sending; display an
-                // error message or try to resend the message
-                error_log("Erreur rencotrer : ".$e->getMessage);
+                echo 'Erreur d\'envoi de mail : ' . $e->getMessage();
                 return false;
             }
         

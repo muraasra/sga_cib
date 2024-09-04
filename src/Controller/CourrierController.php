@@ -13,6 +13,7 @@ use App\Form\PieceJointeType;
 use App\Form\RechercheType;
 use App\Form\SearchType;
 use App\Repository\CourrierRepository;
+use App\Service\MailerService;
 use App\Service\UploadsFile;
 use App\Service\UploadsImage;
 use DateTime;
@@ -160,7 +161,7 @@ class CourrierController extends AbstractController
    
     #[Route('/courrier/add', name: 'app_courrier.add')]
     public function addCourrier(ManagerRegistry $doctrine,
-                                
+                                MailerService $mailerService,
                                  Request $request ,
                                  UploadsFile $uploadsFile,
                                  SluggerInterface $slugger,
@@ -215,7 +216,7 @@ class CourrierController extends AbstractController
                 // si mon formulaire est soumis, on ajoute ,
                 // redige vers les courrier, et messages success
                 $brochureFile=$form->get('brochure')->getData();
-                $typeCourrier=$form->get('type_courrier')->getData();
+                $typeCour =$typeCourrier=$form->get('type_courrier')->getData();
                 $dateReception=$form->get('date_reception')->getData();
                 $dateReception= ($dateReception)->format('Y');
                 
@@ -255,6 +256,24 @@ class CourrierController extends AbstractController
               
                 
                 $entityManager->flush();
+                if ($typeCour->getType() == "Controle") {
+                    $subject=$courrier->getObjet();
+                    $message = "Une nouvelle demande de contole a été envoyer pour le cenadi. \n \t
+                                <br>
+                                 Merci pour votre attention " ;
+                $users= $doctrine->getRepository(User::class)->findBy(['roles' => 'ROLE_ADMIN']);
+                
+                    foreach ($users as $user) {
+                        $mailMessage = 'Mr / Mme '.$user->getPrenom().' '.$user->getNom().$message;
+                if($mailerService->sendEmail(to:$user->getEmail(),content:$mailMessage,subject:$subject)
+                ){
+                    $this->addFlash('success', 'Operation reussie , un mail à été envoyer aux admin');
+                }else{
+                    $this->addFlash('error', 'Erreur lors de l\'envoi du mail');
+                }
+                    }
+                
+                }
                 $this->addFlash('success',"Le courrier de numero d'ordre : ".$numeroOdre." a été ajouter avec succes");
              
         return $this->redirectToRoute("app_courrier.list");
@@ -270,7 +289,8 @@ class CourrierController extends AbstractController
 
 #[Route('/courrier/addDepart', name: 'app_courrier.addDepart')]
 public function addCourrierDepart(ManagerRegistry $doctrine,
-                            
+                            MailerService $mailerService,
+                            CourrierRepository $courrierRepository,
                              Request $request ,
                              UploadsFile $uploadsFile,
                              SluggerInterface $slugger,
@@ -289,6 +309,9 @@ public function addCourrierDepart(ManagerRegistry $doctrine,
             // si mon formulaire est soumis, on ajoute ,
             // redige vers les courrier, et messages success
             $brochureFile=$form->get('brochure')->getData();
+            $typeCour =$typeCourrier=$form->get('type_courrier')->getData();
+                $dateReception=$form->get('date_reception')->getData();
+                $dateReception= ($dateReception)->format('Y');
             // if ($brochureFile) {
             //     $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
             //     // this is needed to safely include the file name as part of the URL
@@ -305,6 +328,13 @@ public function addCourrierDepart(ManagerRegistry $doctrine,
             //     // Update the 'brochureFilename' property to store the new filename
             //     $courrier->setPieceJointe($newFilename);
             // }
+            $typeCourrier=substr($typeCourrier->getType(),0,1);
+                //$dateNow= (new DateTime())->format('Y');                
+                $nbreCourrierAnnee=sprintf('%03d',(count($courrierRepository->findByDate($dateReception))+1));
+                $numeroOdre=trim(htmlspecialchars($nbreCourrierAnnee."/".$dateReception."/".$typeCourrier."/CENADI/CENADI-O"));
+                
+               
+                $courrier->setNumeroOdre($numeroOdre);
             if($brochureFile){
                 $directory=$this->getParameter("personne_directory");
             $courrier->setPieceJointe($uploadsFile->uploadsFile($brochureFile,$directory,$courrier->getExpediteur()));
@@ -314,6 +344,24 @@ public function addCourrierDepart(ManagerRegistry $doctrine,
           
             
             $entityManager->flush();
+            if ($typeCour->getType() == "Controle") {
+                $subject=$courrier->getObjet();
+                $message = "Une nouvelle demande de contole a été envoyer pour le cenadi. \n \t
+                            <br>
+                             Merci pour votre attention " ;
+            $users= $doctrine->getRepository(User::class)->findBy(['roles' => 'ROLE_ADMIN']);
+            
+                foreach ($users as $user) {
+                    $mailMessage = 'Mr / Mme '.$user->getPrenom().' '.$user->getNom().$message;
+            if($mailerService->sendEmail(to:$user->getEmail(),content:$mailMessage,subject:$subject)
+            ){
+                $this->addFlash('success', 'Operation reussie , un mail à été envoyer aux admin');
+            }else{
+                $this->addFlash('error', 'Erreur lors de l\'envoi du mail');
+            }
+                }
+            
+            }
             
          
     return $this->render('courrier', [

@@ -19,6 +19,7 @@ use App\Repository\EvaluationRepository;
 use App\Repository\StagiaireRepository;
 use App\Repository\TacheRepository;
 use App\Service\Helpers;
+use App\Service\MailerService;
 use App\Service\UploadsFile;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,6 +52,7 @@ class StagiaireController extends AbstractController
             Request $request ,
             UploadsFile $uploadsFile,
             StagiaireRepository $stagiaireRepository,
+            MailerService $mailerService
     ): Response
     {
         $create=false;
@@ -72,6 +74,19 @@ class StagiaireController extends AbstractController
             $entityManager=$doctrine->getManager(); 
             $entityManager->persist($stagiaire);
             $entityManager->flush();
+            if ($create) {
+                $subject='Reception de Demande de stage ';
+                $message = ' votre demande de candidature a bien été prise en compte.';
+            }else{
+                $subject='Modification d\'Informations';
+                $message = 'Vos informations ont bien été modifiées.';
+              
+            }
+            $mailMessage = 'Mr / Mme '.$stagiaire->getPrenom().' '.$stagiaire->getNom().$message;
+            if($mailerService->sendEmail(to:$stagiaire->getEmail(),content:$mailMessage,subject:$subject)
+            ){
+                $this->addFlash('success', 'Operation reussie , vous allez recevoir un message de confirmation part mail');
+            }
             return $this->redirectToRoute('app_stagiaire.listCandidature');
         }
         if (!$create) {
@@ -94,6 +109,7 @@ class StagiaireController extends AbstractController
             Request $request ,
             UploadsFile $uploadsFile,
             StagiaireRepository $stagiaireRepository,
+            MailerService $mailerService
     ): Response
     {
         $create = false;
@@ -115,6 +131,19 @@ class StagiaireController extends AbstractController
             $entityManager=$doctrine->getManager(); 
             $entityManager->persist($stagiaire);
             $entityManager->flush();
+            if ($create) {
+                $subject='Reception de Demande de stage ';
+                $message = ' votre demande de candidature a bien été prise en compte.';
+            }else{
+                $subject='Modification d\'Informations';
+                $message = 'Vos informations ont bien été modifiées.';
+              
+            }
+            $mailMessage = 'Mr / Mme '.$stagiaire->getPrenom().' '.$stagiaire->getNom().$message;
+            if($mailerService->sendEmail(to:$stagiaire->getEmail(),content:$mailMessage,subject:$subject)
+            ){
+                $this->addFlash('success', 'Operation reussie , vous allez recevoir un message de confirmation part mail');
+            }
             return $this->redirectToRoute('app_stagiaire.listCandidature');
         }
         if (!$create) {
@@ -150,7 +179,7 @@ class StagiaireController extends AbstractController
     }
     
     #[Route('/stagiaire/candidature/detail/{id}', name: 'app_stagiaire.detailCandidature')]
-    public function detailCandidature( Helpers $helpers,Request $request,EntityManagerInterface $entityManager, ManagerRegistry $doctrine,$id): Response
+    public function detailCandidature( Helpers $helpers,Request $request,EntityManagerInterface $entityManager, ManagerRegistry $doctrine,$id, MailerService $mailerService): Response
     {
         $stagiaire = $entityManager->getRepository(Stagiaire::class)->find($id);
         $form= $this->createForm(HistoriqueType::class);// on utilise la form hitorique type pour ne paceer un nouveau et la on va recuperer l'encadreur avec 'receveur'
@@ -180,6 +209,21 @@ class StagiaireController extends AbstractController
             $doctrine->getManager()->persist($user);
             $doctrine->getManager()->persist($stage);
             $entityManager->flush();
+            
+                $subject='Acception de demande de stage ';
+                $message = "Votre demande demande de stage à été accepté. \n \t
+                             Veillez vous prensentez au Cenadi le ".$stagiaire->getDateDebut()->format('Y-m-d')." \n \t 
+                              Dans nos locaux, vous pouvez vous connecter à votre compte sur la plateforme : http://localhost:8000/login  \n \t
+                             Vos informations de connexion sur la plateforme sont les suivantes. \n \t
+                             Nom d'utilisateur : " .$user->getMatricule(). " \n \t
+                             Votre mot de passe : " .$mdp. " \n \t
+                             Merci pour votre attention " ;
+            
+            $mailMessage = 'Mr / Mme '.$stagiaire->getPrenom().' '.$stagiaire->getNom().$message;
+            if($mailerService->sendEmail(to:$stagiaire->getEmail(),content:$mailMessage,subject:$subject)
+            ){
+                $this->addFlash('success', 'Operation reussie , un mail à été envoyer au stagiaire');
+            }
             $this->addFlash('success',"Le stagiaire ".$stagiaire->getNom()." à pour encadreur ".$encadreur.".".$user->getMatricule()."/".$mdp);
             return $this->redirectToRoute('app_stagiaire.listCandidature');
         }
@@ -214,10 +258,24 @@ class StagiaireController extends AbstractController
     //     }
     // }
     #[Route('/stagiaire/candidature/rejet/{id}', name: 'app_stagiaire.rejetCandidature')]
-    public function rejetCandidature($id, EntityManagerInterface $entityManager): Response{
+    public function rejetCandidature($id, EntityManagerInterface $entityManager,MailerService $mailerService): Response{
         $stagiaire = $entityManager->getRepository(Stagiaire::class)->find($id);
         $stagiaire->setIsAccept(-1);
         $entityManager->flush();
+        $subject='Rejet de demande de stage ';
+        $message = "Votre demande demande de stage à été rejeter; réessayer en une autre periode. \n \t
+                    <br>
+                     Merci pour votre attention " ;
+    
+    $mailMessage = 'Mr / Mme '.$stagiaire->getPrenom().' '.$stagiaire->getNom().$message;
+    if($mailerService->sendEmail(to:$stagiaire->getEmail(),content:$mailMessage,subject:$subject)
+    ){
+        $this->addFlash('success', 'Operation reussie , un mail à été envoyer au stagiaire');
+    }else{
+        $this->addFlash('error', 'Erreur lors de l\'envoi du mail');
+    }
+    
+    
         return $this->redirectToRoute('app_stagiaire.listCandidature');
     }
     #[Route('/stagiaire/encadreur/list', name: 'app_stagiaire.encadreurList')]

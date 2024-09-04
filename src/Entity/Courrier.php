@@ -55,7 +55,7 @@ class Courrier
     #private Collection $piece_jointe;
 
     #[ORM\Column(length: 255)]
-    #[NotBlank(message:"Veillez telecharger le fichier ")]
+    // #[NotBlank(message:"Veillez telecharger le fichier ")]
     private ?string $pieceJointe = null;
 
     // public function __construct()
