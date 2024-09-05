@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Controle;
 use App\Entity\Courrier;
 use App\Entity\Historique;
 use App\Entity\PieceJointe;
@@ -257,6 +258,12 @@ class CourrierController extends AbstractController
                 
                 $entityManager->flush();
                 if ($typeCour->getType() == "Controle") {
+                    $demande_controle=new Controle();
+                    $demande_controle->setCourrierDemande($courrier);
+                    $demande_controle->setStatutDemande(false);
+                    $entityManager->persist($demande_controle);
+                    $entityManager->flush();
+
                     $subject=$courrier->getObjet();
                     $message = "Une nouvelle demande de contole a été envoyer pour le cenadi. \n \t
                                 <br>
@@ -344,7 +351,14 @@ public function addCourrierDepart(ManagerRegistry $doctrine,
           
             
             $entityManager->flush();
+
             if ($typeCour->getType() == "Controle") {
+                $demande_controle=new Controle();
+                    $demande_controle->setCourrierDemande($courrier);
+                    $demande_controle->setStatutDemande(false);
+                    $entityManager->persist($demande_controle);
+                    $entityManager->flush();
+                    
                 $subject=$courrier->getObjet();
                 $message = "Une nouvelle demande de contole a été envoyer pour le cenadi. \n \t
                             <br>

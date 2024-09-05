@@ -156,6 +156,13 @@
                     <span class="links_name">Candidatures Rejeter</span>
                 </a>
             </li>
+            <li class="">
+                <a href="{{ path("app_controle.demandeList")}}">
+                    <i class="bx bx-book-alt"></i>
+                    <span class="links_name">Demande controle</span>
+                </a>
+            </li>
+            
             {% endif %}
             {% if is_granted('ROLE_STAGIAIRE') %}
             <li>

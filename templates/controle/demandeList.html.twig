@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SGA_CIB
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des demandes </h1>
+    	
+    <table class="table table-striped">
+        <thead>
+				<th>NumeroOdre</th>
+				<th>DateReception</th>
+				<th>Expediteur</th>
+				<th>destinataire</th>
+		</thead>
+
+        {% for courriers in demandeControles %}
+        {% set courrier = courriers.courrierDemande %}
+       <tr>
+        <td>{{ courrier.numeroOdre|capitalize}}</td> 
+        <td>{{ courrier.dateReception|date}} </td>
+        <td>{{ courrier.expediteur}} </td>
+        <td>{{ courrier.destinataire}} </td>
+        <td>
+		    <a class="btn btn-primary" href="{{ path("app_courrier.transfert", {id:courrier.id}) }}">
+				Transf
+			</a>
+            <a class="btn btn-primary" href="{{ path("app_courrier.listview", {id:courrier.id}) }}">
+				Voir
+			</a>
+		</td>
+        </tr> 
+
+        {% endfor %}
+    
+    
+    </table>
+{% endblock %}
