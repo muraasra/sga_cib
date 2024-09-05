@@ -58,6 +58,9 @@ class Courrier
     // #[NotBlank(message:"Veillez telecharger le fichier ")]
     private ?string $pieceJointe = null;
 
+    #[ORM\OneToOne(mappedBy: 'courrier_demande', cascade: ['persist', 'remove'])]
+    private ?Controle $controle = null;
+
     // public function __construct()
     // {
     //     $this->historiques = new ArrayCollection();
@@ -222,6 +225,28 @@ class Courrier
     public function getPieceJointe()
     {
         return $this->pieceJointe;
+    }
+
+    public function getControle(): ?Controle
+    {
+        return $this->controle;
+    }
+
+    public function setControle(?Controle $controle): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($controle === null && $this->controle !== null) {
+            $this->controle->setCourrierDemande(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($controle !== null && $controle->getCourrierDemande() !== $this) {
+            $controle->setCourrierDemande($this);
+        }
+
+        $this->controle = $controle;
+
+        return $this;
     }
     
    
