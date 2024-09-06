@@ -207,7 +207,12 @@
                     </button>
                     {% endif %}
                 </td>
-                
+                <td>
+
+            <a class="btn btn-primary" href="{{ path("app_courrier.listview", {id:demandes.id}) }}">
+				Voir
+			</a>
+		</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -245,12 +250,6 @@
                     refusé
                     {% endif %}
                 </td>
-                <td>
-
-            <a class="btn btn-primary" href="{{ path("app_courrier.listview", {id:demande.id}) }}">
-				Voir
-			</a>
-		</td>
             </tr>
             {% endfor %}
         </tbody>
