@@ -198,14 +198,16 @@
                 <td>{{ demande.dateReception|date('d/m/Y') }}</td>
                 <td>
                     {% if demandes.dateControle %}
+                    <button class="btn" onclick="openPopup('{{ demandes.id }}', '{{ demandes.dateControle ? demandes.dateControle|date('Y-m-d') : '' }}')">
                         {{ demandes.dateControle|date('d/m/Y') }}
+                    </button>
                     {% else %}
+                    <button class="btn" onclick="openPopup('{{ demandes.id }}', '{{ demandes.dateControle ? demandes.dateControle|date('Y-m-d') : '' }}')">
                         Non définie
+                    </button>
                     {% endif %}
                 </td>
-                <td>
-                    <button class="btn" onclick="openPopup('{{ demandes.id }}', '{{ demandes.dateControle ? demandes.dateControle|date('Y-m-d') : '' }}')">Modifier la date de contrôle</button>
-                </td>
+                
             </tr>
             {% endfor %}
         </tbody>
@@ -243,6 +245,12 @@
                     refusé
                     {% endif %}
                 </td>
+                <td>
+
+            <a class="btn btn-primary" href="{{ path("app_courrier.listview", {id:demande.id}) }}">
+				Voir
+			</a>
+		</td>
             </tr>
             {% endfor %}
         </tbody>
