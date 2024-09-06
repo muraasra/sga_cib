@@ -4,7 +4,141 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Liste des demandes </h1>
+<style> /* Styles pour le popup */
+        /* Popup Styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .popup-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+
+        .popup-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .popup-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-confirm {
+            background-color: #27ae60;
+            color: #fff;
+        }
+
+        .btn-cancel {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+        /* les sections */
+         h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+         /* Style de table avec taille fixe et barre de défilement */
+        .scrollable-table {
+            max-height: 300px; /* Limite la hauteur à 300px */
+            overflow-y: auto; /* Active la barre de défilement */
+            border: 4px solid #ddd;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 5%;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            position: sticky;
+            top: 0; /* Les en-têtes de table restent visibles lors du défilement */
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        th {
+            background-color: #3498db;
+            color: black;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+        </style>
+{#   <h1>Liste des demandes </h1>
     	
     <table class="table table-striped">
         <thead>
@@ -12,6 +146,7 @@
 				<th>DateReception</th>
 				<th>Expediteur</th>
 				<th>destinataire</th>
+                <th>Date de controle</th>
 		</thead>
 
         {% for courriers in demandeControles %}
@@ -22,17 +157,140 @@
         <td>{{ courrier.expediteur}} </td>
         <td>{{ courrier.destinataire}} </td>
         <td>
-		    <a class="btn btn-primary" href="{{ path("app_courrier.transfert", {id:courrier.id}) }}">
-				Transf
-			</a>
+		 <a >  <button class="btn" onclick="openPopup('{{ courriers.id }}', '{{ courriers.dateControle ? courriers.dateControle|date('d-m-y') : '' }}')"> {{ courriers.dateControle ? courriers.dateControle|date('d-m-y') : '<i> (Ajouter_une_date?)</i>' }} </button></a>
+        </td>
+        <td>
+
             <a class="btn btn-primary" href="{{ path("app_courrier.listview", {id:courrier.id}) }}">
 				Voir
 			</a>
 		</td>
+
         </tr> 
 
         {% endfor %}
     
     
+    </table>#} 
+    <h1>Gestion des Demandes et Contrôles</h1>
+
+<!-- Section des Demandes Non Contrôlées -->
+<h2>Demandes Non Contrôlées</h2>
+<div class="scrollable-table">
+    
+
+    <table class="table-striped progress-bar-striped">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Structure</th>
+                <th>Date de Demande</th>
+                <th>Date de Contrôle</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for demandes in demandesNonControlees %}
+            {% set demande = demandes.courrierDemande  %}
+            <tr>
+                <td>{{ demande.numeroOdre|capitalize }}</td>
+                <td>{{ demande.expediteur }}</td>
+                <td>{{ demande.dateReception|date('d/m/Y') }}</td>
+                <td>
+                    {% if demandes.dateControle %}
+                        {{ demandes.dateControle|date('d/m/Y') }}
+                    {% else %}
+                        Non définie
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn" onclick="openPopup('{{ demandes.id }}', '{{ demandes.dateControle ? demandes.dateControle|date('Y-m-d') : '' }}')">Modifier la date de contrôle</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+</div>
+
+<!-- Section des Demandes Contrôlées -->
+<h2>Contrôles Effectués</h2>
+<div class="section scrollable-table">
+    
+
+    <table class="table-striped progress-bar-striped">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Structure</th>
+                <th>Date de Demande</th>
+                <th>Date de Contrôle</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for demande in demandesControlees %}
+            {% set demande = demandes.courrierDemande  %}
+            <tr>
+                <td>{{ demande.numeroOdre|capitalize }}</td>
+                <td>{{ demande.expediteur }}</td>
+                <td>{{ demande.dateReception|date('d/m/Y') }}</td>
+                <td>
+                    {% if demandes.statutControle == null %}
+                        En cours
+                    {% elseif demandes.statutControle == 1 %}
+                        Accepté
+                    {% else %}
+                    refusé
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    <!-- Popup -->
+<div id="popup-overlay" class="popup-overlay">
+    <div class="popup-content">
+        <h3>Modifier la Date de Contrôle</h3>
+        <input type="date" id="popup-input" value="">
+        <div class="popup-buttons">
+            <button class="btn-confirm" id="popup-confirm">Modifier</button>
+            <button class="btn-cancel" onclick="closePopup()">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    function openPopup(demandeId, currentDate) {
+        document.getElementById('popup-input').value = currentDate;
+        document.getElementById('popup-confirm').onclick = function() {
+            modifierDateControle(demandeId);
+        };
+        document.getElementById('popup-overlay').style.display = 'block';
+    }
+
+    function closePopup() {
+        document.getElementById('popup-overlay').style.display = 'none';
+    }
+
+    function modifierDateControle(demandeId) {
+        const nouvelleDate = document.getElementById('popup-input').value;
+        if (nouvelleDate) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/controle/demande/date/${demandeId}`;
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'date_controle';
+            input.value = nouvelleDate;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
+
 {% endblock %}
