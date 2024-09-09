@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ControleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,14 @@ class Controle
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_controle = null;
+
+    #[ORM\OneToMany(targetEntity: Pv::class, mappedBy: 'courrier_demande')]
+    private Collection $pvs;
+
+    public function __construct()
+    {
+        $this->pvs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +85,36 @@ class Controle
     public function setDateControle(?\DateTimeInterface $date_controle): static
     {
         $this->date_controle = $date_controle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pv>
+     */
+    public function getPvs(): Collection
+    {
+        return $this->pvs;
+    }
+
+    public function addPv(Pv $pv): static
+    {
+        if (!$this->pvs->contains($pv)) {
+            $this->pvs->add($pv);
+            $pv->setCourrierDemande($this);
+        }
+
+        return $this;
+    }
+
+    public function removePv(Pv $pv): static
+    {
+        if ($this->pvs->removeElement($pv)) {
+            // set the owning side to null (unless already changed)
+            if ($pv->getCourrierDemande() === $this) {
+                $pv->setCourrierDemande(null);
+            }
+        }
 
         return $this;
     }

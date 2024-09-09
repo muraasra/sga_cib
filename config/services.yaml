@@ -6,6 +6,7 @@
 parameters:
     personne_directory: '%kernel.project_dir%/public/uploads/piecejointe'
     rapport_directory: '%kernel.project_dir%/public/uploads/rapport'
+    controle_directory: '%kernel.project_dir%/public/uploads/controle'
 
 services:
     # default configuration for services in *this* file

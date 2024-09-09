@@ -6,18 +6,22 @@ use App\Entity\Controle;
 use App\Entity\Courrier;
 use App\Entity\Historique;
 use App\Entity\PieceJointe;
+use App\Entity\Pv;
 use App\Entity\User;
+use App\Form\ControleType;
 use App\Form\CourrierDepartType;
 use App\Form\CourrierType;
 use App\Form\HistoriqueType;
 use App\Form\PieceJointeType;
 use App\Form\RechercheType;
 use App\Form\SearchType;
+use App\Repository\ControleRepository;
 use App\Repository\CourrierRepository;
 use App\Service\MailerService;
 use App\Service\UploadsFile;
 use App\Service\UploadsImage;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Dompdf\Dompdf;
@@ -101,6 +105,7 @@ class CourrierController extends AbstractController
        $entityManager->persist($historique);
        $entityManager->flush();
        $repository = $doctrine->getRepository(Courrier::class)->find($historique->getCourrierId());
+       
         return $this->render('courrier/view.html.twig',[
             'courrier' => $repository,
             'active_page' => 'view',
@@ -108,10 +113,60 @@ class CourrierController extends AbstractController
         ]);
     }
     #[Route('/courrier/listview/{id}', name: 'app_courrier.listview')]
-    public function listview(ManagerRegistry $doctrine, $id): Response
+    public function listview(ManagerRegistry $doctrine, $id, Request $request, EntityManagerInterface $entityManager,UploadsFile $uploadsFile, ControleRepository $controleRepository): Response
     {
        
        $repository = $doctrine->getRepository(Courrier::class)->find($id);
+       if($repository->getTypeCourrier() == "Controle" ){
+        $demandeControles = $controleRepository->findByCourrierDemandeId($id);
+        
+        $demandeControle =$entityManager->getRepository(Controle::class)->find($demandeControles[0]->getId());
+        // $pvControle = $entityManager->getRepository(Pv::class)->find($demandeControle->getCourrierDemande());
+        $pvControle = new Pv();
+        //dd($demandeControle->getCourrierDemande());
+        $pvControle->setCourrierDemande($demandeControle);
+        
+        $form = $this->createForm(ControleType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Gestion du statut
+            $statut = $form->get('statut')->getData();
+
+            // Si accepté, on traite l'import du PV
+            if ($statut == 'accepte') {
+                $demandeControle->setStatutDemande(true);
+                $demandeControle->setStatutControle(true);
+
+                $pvFile = $form->get('pv')->getData();
+
+                if ($pvFile) {
+                $directory=$this->getParameter("controle_directory");
+                $pvControle->setPathPv($uploadsFile->uploadsFile($pvFile,$directory,$demandeControle->getCourrierDemande()->getExpediteur()));
+                  
+                }
+                
+            } elseif ($statut == "refuse")  {
+                // Si refusé, on supprime le fichier PV (s'il existe)
+                $demandeControle->setStatutDemande(true);
+                $demandeControle->setStatutControle(false);
+
+                $pvControle->setPathPv(null);
+            }
+
+            // Enregistrer les modifications dans la base de données
+            $entityManager->flush();
+            $this->addFlash('success','Vous avez ajouter les resultats du controle avec success ');
+            return $this->redirectToRoute('app_courrier.listview',['id' => $id]); // Redirection vers la liste des contrôles
+        }
+
+        return $this->render('courrier/view.html.twig', [
+            'form' => $form->createView(),
+            'courrier' => $repository,
+            'active_page' => 'view',
+            
+        ]);
+       }
         return $this->render('courrier/view.html.twig',[
             'courrier' => $repository,
             'active_page' => 'view',

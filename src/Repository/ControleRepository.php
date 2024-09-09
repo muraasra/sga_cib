@@ -20,7 +20,18 @@ class ControleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Controle::class);
     }
-
+    public function findByCourrierDemandeId($value): array
+       {
+           return $this->createQueryBuilder('c')
+               ->andWhere('c.courrier_demande = :val')
+               ->setParameter('val', $value)
+               ->orderBy('c.id', 'ASC')
+               
+               ->getQuery()
+               ->getResult()
+               
+           ;
+       }
 //    /**
 //     * @return Controle[] Returns an array of Controle objects
 //     */
