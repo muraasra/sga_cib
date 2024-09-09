@@ -154,7 +154,7 @@ class CourrierController extends AbstractController
                 $pvControle->setPathPv(null);
             }
 
-           // Enregistrer les modifications dans la base de données
+            // Enregistrer les modifications dans la base de données
             $entityManager->flush();
             $this->addFlash('success','Vous avez ajouter les resultats du controle avec success ');
             return $this->redirectToRoute('app_courrier.listview',['id' => $id]); // Redirection vers la liste des contrôles
